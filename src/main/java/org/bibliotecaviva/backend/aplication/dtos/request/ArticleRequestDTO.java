@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
  * DTO for {@link org.bibliotecaviva.backend.domain.entities.textual.Article}
  */
 public record ArticleRequestDTO(String title, String author, LocalDateTime publicationDate, String description,
-                                String content) implements Serializable {
+                                String content) implements WorkRequest {
 }

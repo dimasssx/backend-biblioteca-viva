@@ -1,7 +1,6 @@
 package org.bibliotecaviva.backend.aplication.services;
 
 import lombok.RequiredArgsConstructor;
-import org.bibliotecaviva.backend.aplication.dtos.request.WorkRequestDTO;
 import org.bibliotecaviva.backend.aplication.dtos.response.WorkResponseDTO;
 import org.bibliotecaviva.backend.aplication.mappers.WorkMapper;
 import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
@@ -23,8 +22,8 @@ public class WorkService {
     * Puxa todos da tabela works usando uma interface com atributos específicos
     * para nao requisitar tudo do banco
      */
-    public List<WorkResponseDTO> getAll(){
-        return workRepository.findAllSummary()
+    public List<WorkResponseDTO> getAll(String type){
+        return workRepository.findAllSummary(type)
                 .stream()
                 .map(workMapper::toWorkDTO)
                 .toList();

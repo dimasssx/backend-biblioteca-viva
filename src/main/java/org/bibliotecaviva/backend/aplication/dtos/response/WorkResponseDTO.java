@@ -17,6 +17,7 @@ public class WorkResponseDTO {
     private String author;
     private LocalDateTime publicationDate;
     private String description;
+    private String type;
 //        Todo:
 //        Integer viewCount;
 //        Integer likeCount;

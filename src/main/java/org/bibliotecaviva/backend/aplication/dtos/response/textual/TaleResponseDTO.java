@@ -8,6 +8,8 @@ import org.bibliotecaviva.backend.aplication.dtos.response.TextualWorkResponseDT
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-
+@AllArgsConstructor
 public class TaleResponseDTO extends TextualWorkResponseDTO {
+    private String genre;
+
 }

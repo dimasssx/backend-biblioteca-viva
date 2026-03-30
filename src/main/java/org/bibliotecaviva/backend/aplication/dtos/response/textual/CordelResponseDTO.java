@@ -9,5 +9,8 @@ import org.bibliotecaviva.backend.aplication.dtos.response.TextualWorkResponseDT
 @Getter
 @NoArgsConstructor
 @SuperBuilder
+@AllArgsConstructor
 public class CordelResponseDTO extends TextualWorkResponseDTO {
+    private String rhymeScheme;
+
 }

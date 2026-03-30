@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
  */
 public record EssayRequestDTO(String title, String author, LocalDateTime publicationDate, String description,
                               String content, Integer rate, String theme, String themeDescription,
-                              String feedback) implements Serializable {
+                              String feedback) implements WorkRequest {
 }

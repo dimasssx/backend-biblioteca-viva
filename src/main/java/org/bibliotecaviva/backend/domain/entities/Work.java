@@ -9,9 +9,10 @@ import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name="Obras")
 @Getter
-    @NoArgsConstructor
+@NoArgsConstructor
 @AllArgsConstructor
 public abstract class Work {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)

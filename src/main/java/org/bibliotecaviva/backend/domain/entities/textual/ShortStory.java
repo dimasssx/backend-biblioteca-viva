@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.domain.entities.textual;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,5 +11,6 @@ import org.bibliotecaviva.backend.domain.entities.TextualWork;
 @Getter
 @Setter
 @NoArgsConstructor
+@DiscriminatorValue("ShortStory")
 public class ShortStory extends TextualWork {
 }

@@ -14,4 +14,5 @@ public interface WorkSummary {
     String getAuthor();
     LocalDateTime getPublicationDate();
     String getDescription();
+    String getType();
 }

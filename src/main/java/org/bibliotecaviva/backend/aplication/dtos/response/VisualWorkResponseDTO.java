@@ -15,5 +15,4 @@ import java.time.Duration;
 @AllArgsConstructor
     public abstract class VisualWorkResponseDTO extends WorkResponseDTO {
     private String url;
-    private Duration duration;
 }

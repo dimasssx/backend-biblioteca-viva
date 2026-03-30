@@ -8,5 +8,5 @@ import java.time.LocalDateTime;
  * DTO for {@link LibraLiterature}
  */
 public record LibraLiteratureRequestDTO(String title, String author, LocalDateTime publicationDate, String description,
-                                        String url) implements Serializable {
+                                        String url) implements WorkRequest {
 }

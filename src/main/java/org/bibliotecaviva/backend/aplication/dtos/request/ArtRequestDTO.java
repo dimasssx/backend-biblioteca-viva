@@ -7,6 +7,6 @@ import java.time.LocalDateTime;
 /**
  * DTO for {@link org.bibliotecaviva.backend.domain.entities.visual.Art}
  */
-public record ArtRequestDTO(String title, String author, LocalDateTime publicationDate, String description, String url,
-                            Duration duration) implements Serializable {
+public record ArtRequestDTO(String title, String author, LocalDateTime publicationDate, String description, String url)
+        implements WorkRequest {
 }
