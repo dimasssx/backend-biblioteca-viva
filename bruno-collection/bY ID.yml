@@ -1,0 +1,15 @@
+info:
+  name: bY ID
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{api_url}}work/3c6d6733-a874-4ae3-9736-309ad0111091"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

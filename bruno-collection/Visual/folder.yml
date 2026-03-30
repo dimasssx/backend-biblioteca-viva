@@ -1,0 +1,7 @@
+info:
+  name: Visual
+  type: folder
+  seq: 6
+
+request:
+  auth: inherit

@@ -1,0 +1,25 @@
+info:
+  name: create infographic
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{api_url}}work/infographics"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Mapa da Diversidade Literária: Brasil 2026",
+        "author": "Instituto de Dados Culturais (IDC)",
+        "publicationDate": "2026-03-30T11:41:00",
+        "description": "Um infográfico interativo que visualiza a distribuição de gêneros literários mais lidos em cada região do país, com destaque para o crescimento da literatura periférica.",
+        "url": "https://cdn.bibliotecaviva.org/static/infographics/diversidade-literaria-2026.svg"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

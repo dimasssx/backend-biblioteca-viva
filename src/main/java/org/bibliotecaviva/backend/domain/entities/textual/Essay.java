@@ -3,13 +3,24 @@ package org.bibliotecaviva.backend.domain.entities.textual;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.domain.entities.TextualWork;
 
 @Entity
-/*
-* Redação nota 10
-*/
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@DiscriminatorValue("Essay")
+@SuperBuilder
 
+/*
+ * Redação nota 10
+ */
 public class Essay extends TextualWork {
     private Integer rate;
     private String theme;

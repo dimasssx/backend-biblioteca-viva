@@ -1,0 +1,25 @@
+info:
+  name: create article
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{api_url}}work/articles"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "A Evolução da Curadoria Digital em Bibliotecas Comunitárias",
+        "author": "Mariana Silva de Souza",
+        "publicationDate": "2026-03-30T14:20:00",
+        "description": "Uma análise sobre como a digitalização de acervos locais fortalece a identidade cultural de periferias urbanas no século XXI.",
+        "content": "O papel das bibliotecas mudou drasticamente na última década. Não se trata mais apenas de um repositório físico de livros, mas de um hub de conexão cultural. Neste artigo, exploramos o conceito de 'Curadoria Viva', onde a comunidade participa ativamente da escolha e da digitalização de memórias orais e documentos históricos locais. O estudo de caso realizado na Biblioteca Viva de Recife demonstra que o engajamento digital aumentou em 45% o acesso de jovens a autores regionais. Através da implementação de metadados sociais e interfaces gamificadas, conseguimos transformar o ato de ler em uma experiência coletiva e descentralizada. Concluímos que a tecnologia, quando aplicada com foco no social, não substitui o papel do bibliotecário, mas amplia seu alcance como mediador de conhecimento."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
