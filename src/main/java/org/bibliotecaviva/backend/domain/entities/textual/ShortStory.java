@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.domain.entities.TextualWork;
 
 @Entity
@@ -12,5 +13,7 @@ import org.bibliotecaviva.backend.domain.entities.TextualWork;
 @Setter
 @NoArgsConstructor
 @DiscriminatorValue("ShortStory")
+@SuperBuilder
+
 public class ShortStory extends TextualWork {
 }

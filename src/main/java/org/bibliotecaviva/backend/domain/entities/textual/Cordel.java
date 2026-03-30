@@ -6,11 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.domain.entities.TextualWork;
 
 @Entity
 @Getter
 @Setter
+@SuperBuilder
+
 @NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("Cordel")

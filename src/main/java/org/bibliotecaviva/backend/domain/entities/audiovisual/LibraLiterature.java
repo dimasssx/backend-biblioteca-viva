@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.domain.entities.AudioVisualWork;
 
 
@@ -13,5 +14,7 @@ import org.bibliotecaviva.backend.domain.entities.AudioVisualWork;
 @Setter
 @NoArgsConstructor
 @DiscriminatorValue("LibraLiterature")
+@SuperBuilder
+
 public class LibraLiterature extends AudioVisualWork {
 }

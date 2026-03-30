@@ -55,37 +55,37 @@ public interface WorkMapper {
     // daqui pra baixo separar ppor classe do mapper se prcisar, ver depois
     LibraLiterature toEntity(LibraLiteratureRequestDTO libraLiteratureRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    LibraLiterature partialUpdate(LibraLiteratureRequestDTO libraLiteratureRequestDTO, @MappingTarget LibraLiterature libraLiterature);
+    void partialUpdate(LibraLiteratureRequestDTO libraLiteratureRequestDTO, @MappingTarget LibraLiterature libraLiterature);
 
     Multimedia toEntity(MultimediaRequestDTO multimediaRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Multimedia partialUpdate(MultimediaRequestDTO multimediaRequestDTO, @MappingTarget Multimedia multimedia);
+    void partialUpdate(MultimediaRequestDTO multimediaRequestDTO, @MappingTarget Multimedia multimedia);
 
     Article toEntity(ArticleRequestDTO articleRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Article partialUpdate(ArticleRequestDTO articleRequestDTO, @MappingTarget Article article);
+    void partialUpdate(ArticleRequestDTO articleRequestDTO, @MappingTarget Article article);
 
     Cordel toEntity(CordelRequestDTO cordelRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Cordel partialUpdate(CordelRequestDTO cordelRequestDTO, @MappingTarget Cordel cordel);
+    void partialUpdate(CordelRequestDTO cordelRequestDTO, @MappingTarget Cordel cordel);
 
     Essay toEntity(EssayRequestDTO essayRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Essay partialUpdate(EssayRequestDTO essayRequestDTO, @MappingTarget Essay essay);
+    void partialUpdate(EssayRequestDTO essayRequestDTO, @MappingTarget Essay essay);
 
     ShortStory toEntity(ShortStoryRequestDTO shortStoryRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ShortStory partialUpdate(ShortStoryRequestDTO shortStoryRequestDTO, @MappingTarget ShortStory shortStory);
+    void partialUpdate(ShortStoryRequestDTO shortStoryRequestDTO, @MappingTarget ShortStory shortStory);
 
     Tale toEntity(TaleRequestDTO taleRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Tale partialUpdate(TaleRequestDTO taleRequestDTO, @MappingTarget Tale tale);
+    void partialUpdate(TaleRequestDTO taleRequestDTO, @MappingTarget Tale tale);
 
     Art toEntity(ArtRequestDTO artRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Art partialUpdate(ArtRequestDTO artRequestDTO, @MappingTarget Art art);
+    void partialUpdate(ArtRequestDTO artRequestDTO, @MappingTarget Art art);
 
     Infographic toEntity(InfographicRequestDTO infographicRequestDTO);
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    Infographic partialUpdate(InfographicRequestDTO infographicRequestDTO, @MappingTarget Infographic infographic);
+    void partialUpdate(InfographicRequestDTO infographicRequestDTO, @MappingTarget Infographic infographic);
 }

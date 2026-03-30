@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.domain.entities.TextualWork;
 
 @Entity
@@ -15,6 +16,8 @@ import org.bibliotecaviva.backend.domain.entities.TextualWork;
 @AllArgsConstructor
 @NoArgsConstructor
 @DiscriminatorValue("Tale")
+@SuperBuilder
+
 public class Tale extends TextualWork {
     @Column(columnDefinition = "TEXT")
     private String genre;

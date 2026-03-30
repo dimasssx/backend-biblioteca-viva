@@ -2,6 +2,7 @@ package org.bibliotecaviva.backend.domain.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ import java.util.UUID;
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 @Table(name="Obras")
 @Getter
+@Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Work {
@@ -23,4 +26,10 @@ public abstract class Work {
     private LocalDateTime publicationDate;
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    public String getType() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class) != null
+                ? this.getClass().getAnnotation(DiscriminatorValue.class).value()
+                : this.getClass().getSimpleName().toUpperCase();
+    }
 }

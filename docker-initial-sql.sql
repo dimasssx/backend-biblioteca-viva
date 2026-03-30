@@ -74,7 +74,7 @@ INSERT INTO article (id, content)
 VALUES ('11111111-1111-1111-1111-111111111001',
         'Texto jornalistico com introducao, desenvolvimento e conclusao sobre o rio.'),
        ('11111111-1111-1111-1111-111111111002', 'Artigo opinativo com dados de leitura e analise social.'),
-       ('11111111-1111-1111-1111-111111111003', 'Materia especial com entrevistas e contexto historico local.');
+        ('11111111-1111-1111-1111-111111111003', 'Materia especial com entrevistas e contexto historico local.');
 
 INSERT INTO cordel (id, content, rhyme_scheme)
 VALUES ('22222222-2222-2222-2222-222222222001', 'Versos em sextilhas descrevendo cenas da feira.', 'ABABCC'),
