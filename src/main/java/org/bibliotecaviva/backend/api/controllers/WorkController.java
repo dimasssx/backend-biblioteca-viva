@@ -1,6 +1,7 @@
 package org.bibliotecaviva.backend.api.controllers;
 
 
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.aplication.dtos.request.*;
@@ -30,8 +31,8 @@ public class WorkController {
         return ResponseEntity.ok(service.getById(id));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Void> delete(@RequestParam UUID id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

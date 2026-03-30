@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.aplication.dtos.response.textual;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.bibliotecaviva.backend.aplication.dtos.response.TextualWorkResponseDTO;
 
+@Schema(name = "EssayResponseDTO")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

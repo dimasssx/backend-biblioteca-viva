@@ -1,0 +1,25 @@
+info:
+  name: create multimedia
+  type: http
+  seq: 5
+
+http:
+  method: POST
+  url: "{{api_url}}work/multimedias"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Documentário: As Vozes do Cais",
+        "author": "Produtora Memória Viva",
+        "publicationDate": "2026-03-30T14:00:00",
+        "description": "Um registro audiovisual sobre a rotina dos trabalhadores do antigo porto, mesclando entrevistas históricas e trilha sonora original.",
+        "url": "https://cdn.bibliotecaviva.org/videos/documentarios/vozes-do-cais-720p.mp4"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

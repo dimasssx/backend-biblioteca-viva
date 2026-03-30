@@ -1,0 +1,25 @@
+info:
+  name: create art
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{api_url}}work/arts"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Fractais Urbanos: A Geometria do Recife",
+        "author": "Carlos Pincel Eduardo",
+        "publicationDate": "2026-03-30T11:45:00",
+        "description": "Uma composição digital explorando as linhas arquitetônicas do Cais do Sertão sob uma perspectiva de geometria fractal e cores neon.",
+        "url": "https://cdn.bibliotecaviva.org/media/arts/2026/fractais-urbanos-01.jpg"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
