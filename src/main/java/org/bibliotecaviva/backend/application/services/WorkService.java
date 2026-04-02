@@ -1,17 +1,15 @@
 package org.bibliotecaviva.backend.application.services;
 
 import lombok.RequiredArgsConstructor;
-import org.bibliotecaviva.backend.application.dtos.request.*;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
+import org.bibliotecaviva.backend.application.dtos.request.WorkRequest;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.LibraLiteratureRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.MultimediaRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.ArticleRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.CordelRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.EssayRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.ShortStoryRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.TaleRequestDTO;
+import org.bibliotecaviva.backend.application.dtos.request.textual.*;
 import org.bibliotecaviva.backend.application.dtos.request.visual.ArtRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.visual.InfographicRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.response.WorkResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.IWorkResponseDTO;
 import org.bibliotecaviva.backend.application.mappers.WorkMapper;
 import org.bibliotecaviva.backend.domain.entities.Work;
 import org.bibliotecaviva.backend.domain.entities.audiovisual.LibraLiterature;
@@ -25,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
+@Log4j2
 @Service
 @RequiredArgsConstructor
 
@@ -38,14 +36,14 @@ public class WorkService {
      * Puxa todos da tabela works usando uma interface com atributos específicos
      * para nao requisitar tudo do banco
      */
-    public List<WorkResponseDTO> getAll(String type) {
+    public List<IWorkResponseDTO> getAll(String type) {
         return workRepository.findAllSummary(type)
                 .stream()
                 .map(workMapper::toWorkDTO)
                 .toList();
     }
 
-    public WorkResponseDTO getById(UUID id) {
+    public IWorkResponseDTO getById(UUID id) {
         var work = workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra com id " + id + " não encontrada"));
         return workMapper.toDTO(work);
@@ -53,11 +51,11 @@ public class WorkService {
 
     public void delete(UUID id) {
         workRepository.findById(id)
-                .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));   
+                .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
         workRepository.deleteById(id);
     }
 
-    public <T extends WorkRequest> WorkResponseDTO create(T dto) {
+    public <T extends WorkRequest> IWorkResponseDTO create(T dto) {
         Work work = switch (dto) {
             case EssayRequestDTO d -> workMapper.toEntity(d);
             case ArtRequestDTO d -> workMapper.toEntity(d);
@@ -73,11 +71,9 @@ public class WorkService {
         };
         return workMapper.toDTO(workRepository.save(work));
     }
-
-    public <T extends WorkRequest> WorkResponseDTO update(UUID id, T dto) {
+    public <T extends WorkRequest> IWorkResponseDTO update(UUID id, T dto) {
         Work work = workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
-
         switch (dto) {
             case EssayRequestDTO d -> workMapper.partialUpdate(d, (Essay) work);
             case ArtRequestDTO d -> workMapper.partialUpdate(d, (Art) work);

@@ -1,7 +1,6 @@
 package org.bibliotecaviva.backend.application.mappers;
 
 
-import org.bibliotecaviva.backend.application.dtos.request.*;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.LibraLiteratureRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.MultimediaRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.textual.ArticleRequestDTO;
@@ -11,7 +10,7 @@ import org.bibliotecaviva.backend.application.dtos.request.textual.ShortStoryReq
 import org.bibliotecaviva.backend.application.dtos.request.textual.TaleRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.visual.ArtRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.visual.InfographicRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.response.WorkResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.*;
 import org.bibliotecaviva.backend.application.dtos.response.audiovisual.LibraLiteratureResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.audiovisual.MultimediaResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.textual.*;
@@ -32,8 +31,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring")
 public interface WorkMapper {
 
-    WorkResponseDTO toWorkDTO(WorkSummary summary);
-    default WorkResponseDTO toDTO(Work work) {
+    default IWorkResponseDTO toWorkDTO(WorkSummary summary){
+        return toWorkSummary(summary);
+    }
+
+    default IWorkResponseDTO toDTO(Work work) {
         return switch (work) {
             case LibraLiterature w -> toLibraLiteratureResponseDTO(w);
             case Multimedia w -> toMultimediaResponseDTO(w);
@@ -44,10 +46,12 @@ public interface WorkMapper {
             case Tale w -> toTaleResponseDTO(w);
             case Art w -> toArtResponseDTO(w);
             case Infographic w -> toInfographicReponseDTO(w);
-            default ->
-                    throw new IllegalArgumentException("Tipo de Work não mapeado: " + work.getClass().getSimpleName());
+
+            default -> throw new IllegalStateException("Unexpected value: " + work);
         };
     }
+    // mapeamento pra work summary
+    WorkResponseDTO toWorkSummary (WorkSummary work);
 
     // mapeamentos específicos de cada entidade
     LibraLiteratureResponseDTO toLibraLiteratureResponseDTO(LibraLiterature libraLiterature);

@@ -1,16 +1,17 @@
 package org.bibliotecaviva.backend.application.dtos.response.textual;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.bibliotecaviva.backend.application.dtos.response.TextualWorkResponseDTO;
-import org.bibliotecaviva.backend.application.dtos.response.WorkResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.IWorkResponseDTO;
 
-@Schema(name = "ArticleResponseDTO")
-@Getter
-@NoArgsConstructor
-@SuperBuilder
-public class ArticleResponseDTO extends TextualWorkResponseDTO {
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record ArticleResponseDTO(
+        UUID id,
+        String title,
+        String author,
+        LocalDateTime publicationDate,
+        String description,
+        String type,
+        String content
+) implements IWorkResponseDTO {
 }
