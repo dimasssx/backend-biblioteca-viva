@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
  */
 @Schema(hidden = true)
 public interface WorkRequest {
+    //Todo: Colocar verificações de dominio das urls posteriormente
     String title();
-
     String author(); // ver comoo vai mandar isso no front tbm, por enqunato ta mandando email
-
     LocalDateTime publicationDate();
-
     String description();
     //view count
     //likes
