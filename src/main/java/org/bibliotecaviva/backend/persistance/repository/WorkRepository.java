@@ -1,5 +1,6 @@
-package org.bibliotecaviva.backend.infrastructure.persistance.repository;
+package org.bibliotecaviva.backend.persistance.repository;
 
+import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.Work;
 import org.bibliotecaviva.backend.domain.entities.WorkSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,9 +14,12 @@ import java.util.UUID;
 @Repository
 public interface WorkRepository extends  JpaRepository<Work, UUID> {
     @Query(value = """
-    SELECT *
-    FROM obras
+    SELECT w.id, w.title, w.publication_date, w.description, w.type, u.name as author
+    FROM obras w
+    JOIN users u ON u.id = w.users_id
     WHERE (:type IS NULL OR type = :type)
     """, nativeQuery = true)
     List<WorkSummary> findAllSummary(@Param("type") String type);
+
+    boolean existsWorkByAuthorAndTitle(User author, String title);
 }

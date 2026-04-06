@@ -1,18 +1,17 @@
-package org.bibliotecaviva.backend.infrastructure.web.controller;
+package org.bibliotecaviva.backend.api.controller;
 
 
-
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.LibraLiteratureRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.MultimediaRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.ArticleRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.CordelRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.EssayRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.ShortStoryRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.request.textual.TaleRequestDTO;
+import org.bibliotecaviva.backend.application.dtos.request.textual.*;
 import org.bibliotecaviva.backend.application.dtos.request.visual.ArtRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.visual.InfographicRequestDTO;
+import org.bibliotecaviva.backend.application.dtos.response.WorkResponse;
 import org.bibliotecaviva.backend.application.dtos.response.WorkResponseDTO;
 import org.bibliotecaviva.backend.application.services.WorkService;
 import org.springframework.http.HttpStatus;
@@ -26,16 +25,17 @@ import java.util.UUID;
 @RequestMapping("/work")
 @RequiredArgsConstructor
 public class WorkController {
-
+    //TODO: PATCH FOR PARTIAL UPDATES IF NEEDED
     private final WorkService service;
 
     @GetMapping
-    public ResponseEntity<List<WorkResponseDTO>> getAll(@RequestParam(required = false) String type) {
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = WorkResponseDTO.class)))
+    public ResponseEntity<List<WorkResponse>> getAll(@RequestParam(required = false) String type) {
         return ResponseEntity.ok(service.getAll(type));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WorkResponseDTO> getById(@PathVariable UUID id) {
+    public ResponseEntity<WorkResponse> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.getById(id));
     }
 
@@ -46,92 +46,92 @@ public class WorkController {
     }
 
     @PostMapping("/articles")
-    public ResponseEntity<WorkResponseDTO> createArticle(@RequestBody @Valid ArticleRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createArticle(@RequestBody @Valid ArticleRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/articles/{id}")
-    public ResponseEntity<WorkResponseDTO> updateArticle(@PathVariable UUID id, @RequestBody @Valid ArticleRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateArticle(@PathVariable UUID id, @RequestBody @Valid ArticleRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/cordels")
-    public ResponseEntity<WorkResponseDTO> createCordel(@RequestBody @Valid CordelRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createCordel(@RequestBody @Valid CordelRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/cordels/{id}")
-    public ResponseEntity<WorkResponseDTO> updateCordel(@PathVariable UUID id, @RequestBody @Valid CordelRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateCordel(@PathVariable UUID id, @RequestBody @Valid CordelRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/essays")
-    public ResponseEntity<WorkResponseDTO> createEssay(@RequestBody @Valid EssayRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createEssay(@RequestBody @Valid EssayRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/essays/{id}")
-    public ResponseEntity<WorkResponseDTO> updateEssay(@PathVariable UUID id, @RequestBody @Valid EssayRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateEssay(@PathVariable UUID id, @RequestBody @Valid EssayRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/short-stories")
-    public ResponseEntity<WorkResponseDTO> createShortStory(@RequestBody @Valid ShortStoryRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createShortStory(@RequestBody @Valid ShortStoryRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/short-stories/{id}")
-    public ResponseEntity<WorkResponseDTO> updateShortStory(@PathVariable UUID id, @RequestBody @Valid ShortStoryRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateShortStory(@PathVariable UUID id, @RequestBody @Valid ShortStoryRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/tales")
-    public ResponseEntity<WorkResponseDTO> createTale(@RequestBody @Valid TaleRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createTale(@RequestBody @Valid TaleRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/tales/{id}")
-    public ResponseEntity<WorkResponseDTO> updateTale(@PathVariable UUID id, @RequestBody @Valid TaleRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateTale(@PathVariable UUID id, @RequestBody @Valid TaleRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/arts")
-    public ResponseEntity<WorkResponseDTO> createArt(@RequestBody @Valid ArtRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createArt(@RequestBody @Valid ArtRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/arts/{id}")
-    public ResponseEntity<WorkResponseDTO> updateArt(@PathVariable UUID id, @RequestBody @Valid ArtRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateArt(@PathVariable UUID id, @RequestBody @Valid ArtRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/infographics")
-    public ResponseEntity<WorkResponseDTO> createInfographic(@RequestBody @Valid InfographicRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createInfographic(@RequestBody @Valid InfographicRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/infographics/{id}")
-    public ResponseEntity<WorkResponseDTO> updateInfographic(@PathVariable UUID id, @RequestBody @Valid InfographicRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateInfographic(@PathVariable UUID id, @RequestBody @Valid InfographicRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/multimedias")
-    public ResponseEntity<WorkResponseDTO> createMultimedia(@RequestBody @Valid MultimediaRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createMultimedia(@RequestBody @Valid MultimediaRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/multimedias/{id}")
-    public ResponseEntity<WorkResponseDTO> updateMultimedia(@PathVariable UUID id, @RequestBody @Valid MultimediaRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateMultimedia(@PathVariable UUID id, @RequestBody @Valid MultimediaRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
     @PostMapping("/libra-literatures")
-    public ResponseEntity<WorkResponseDTO> createLibraLiterature(@RequestBody @Valid LibraLiteratureRequestDTO dto) {
+    public ResponseEntity<WorkResponse> createLibraLiterature(@RequestBody @Valid LibraLiteratureRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     @PutMapping("/libra-literatures/{id}")
-    public ResponseEntity<WorkResponseDTO> updateLibraLiterature(@PathVariable UUID id, @RequestBody @Valid LibraLiteratureRequestDTO dto) {
+    public ResponseEntity<WorkResponse> updateLibraLiterature(@PathVariable UUID id, @RequestBody @Valid LibraLiteratureRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 }

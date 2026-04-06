@@ -1,15 +1,18 @@
 package org.bibliotecaviva.backend.application.dtos.response.audiovisual;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
-import org.bibliotecaviva.backend.application.dtos.response.AudioVisualWorkResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.WorkResponse;
 
-@Schema(name = "LibraLiteratureResponseDTO")
-@Getter
-@NoArgsConstructor
-@SuperBuilder
-public class LibraLiteratureResponseDTO extends AudioVisualWorkResponseDTO {
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record LibraLiteratureResponseDTO(
+        UUID id,
+        String title,
+        String author,
+        LocalDateTime publicationDate,
+        String description,
+        String type,
+        String url
+) implements WorkResponse {
 }

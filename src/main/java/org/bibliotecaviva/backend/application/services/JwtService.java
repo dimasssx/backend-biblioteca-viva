@@ -1,10 +1,10 @@
-package org.bibliotecaviva.backend.infrastructure.security;
+package org.bibliotecaviva.backend.application.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.bibliotecaviva.backend.domain.entities.user.User;
+import org.bibliotecaviva.backend.domain.entities.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

@@ -1,13 +1,14 @@
-package org.bibliotecaviva.backend.infrastructure.web.controller;
+package org.bibliotecaviva.backend.api.controller;
 
 import lombok.RequiredArgsConstructor;
 
 import org.bibliotecaviva.backend.application.dtos.request.LoginRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.RegisterRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.LoginResponseDTO;
-import org.bibliotecaviva.backend.infrastructure.persistance.repository.UserRepository;
-import org.bibliotecaviva.backend.domain.entities.user.User;
-import org.bibliotecaviva.backend.infrastructure.security.JwtService;
+import org.bibliotecaviva.backend.domain.enums.Role;
+import org.bibliotecaviva.backend.persistance.repository.UserRepository;
+import org.bibliotecaviva.backend.domain.entities.User;
+import org.bibliotecaviva.backend.application.services.JwtService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,10 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
+    //TODO: remover logica de serviço direto no controller
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -36,7 +38,7 @@ public class AuthController {
         );
         User user = (User) userDetailsService.loadUserByUsername(request.email());
         String token = jwtService.generateToken(user);
-        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail(), user.getRole()));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail()));
     }
 
     @PostMapping("/register")
@@ -49,11 +51,11 @@ public class AuthController {
                 .name(request.name())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .role(request.role())
+                .role(Role.ALUNO)
                 .build();
 
         userRepository.save(user);
         String token = jwtService.generateToken(user);
-        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail(), user.getRole()));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail()));
     }
 }
