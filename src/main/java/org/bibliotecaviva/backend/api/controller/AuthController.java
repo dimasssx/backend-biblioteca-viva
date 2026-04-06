@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.request.LoginRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.RegisterRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.LoginResponseDTO;
+import org.bibliotecaviva.backend.domain.enums.Role;
 import org.bibliotecaviva.backend.persistance.repository.UserRepository;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.application.services.JwtService;
@@ -37,7 +38,7 @@ public class AuthController {
         );
         User user = (User) userDetailsService.loadUserByUsername(request.email());
         String token = jwtService.generateToken(user);
-        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail(), user.getRole()));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail()));
     }
 
     @PostMapping("/register")
@@ -50,11 +51,11 @@ public class AuthController {
                 .name(request.name())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .role(request.role())
+                .role(Role.ALUNO)
                 .build();
 
         userRepository.save(user);
         String token = jwtService.generateToken(user);
-        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail(), user.getRole()));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user.getEmail()));
     }
 }

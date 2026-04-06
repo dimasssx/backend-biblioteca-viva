@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.persistance.repository;
 
+import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.Work;
 import org.bibliotecaviva.backend.domain.entities.WorkSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface WorkRepository extends  JpaRepository<Work, UUID> {
     WHERE (:type IS NULL OR type = :type)
     """, nativeQuery = true)
     List<WorkSummary> findAllSummary(@Param("type") String type);
+
+    boolean existsWorkByAuthorAndTitle(User author, String title);
 }

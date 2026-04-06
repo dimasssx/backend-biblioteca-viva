@@ -3,9 +3,9 @@ package org.bibliotecaviva.backend.domain.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Work not found")
-public class WorkNotFoundException extends RuntimeException {
-    public WorkNotFoundException(String message) {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST,reason = "User not found")
+public class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) {
         super(message);
     }
 }

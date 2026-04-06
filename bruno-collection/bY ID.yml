@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{api_url}}work/3c6d6733-a874-4ae3-9736-309ad0111091"
+  url: "{{api_url}}work/11111111-1111-1111-1111-111111111001"
   auth: inherit
 
 settings:

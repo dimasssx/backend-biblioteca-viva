@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.application.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bibliotecaviva.backend.application.dtos.request.WorkRequest;
@@ -17,6 +18,8 @@ import org.bibliotecaviva.backend.domain.entities.textual.*;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.visual.Art;
 import org.bibliotecaviva.backend.domain.entities.visual.Infographic;
+import org.bibliotecaviva.backend.domain.exceptions.UserNotFoundException;
+import org.bibliotecaviva.backend.domain.exceptions.WorkAlreadyExistsException;
 import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
 import org.bibliotecaviva.backend.persistance.repository.UserRepository;
 import org.bibliotecaviva.backend.persistance.repository.WorkRepository;
@@ -52,16 +55,18 @@ public class WorkService {
         return workMapper.toDTO(work);
     }
 
+    @Transactional
     public void delete(UUID id) {
         workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
         workRepository.deleteById(id);
     }
 
+    @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto) {
 
         User author = userRepository.findByEmail(dto.author())
-                    .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado: " + dto.author()));
+                    .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.author()));
 
         Work work = switch (dto) {
             case EssayRequestDTO d -> workMapper.toEntity(d);
@@ -76,8 +81,12 @@ public class WorkService {
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         };
-
         work.setAuthor(author);
+
+        //todo: pode verificar por tipo tambem, ver isso dps
+        if (workRepository.existsWorkByAuthorAndTitle(author, work.getTitle())) {
+            throw new WorkAlreadyExistsException("Obra com mesmo título já existe para este autor");
+        }
         return workMapper.toDTO(workRepository.save(work));
     }
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto) {
@@ -95,6 +104,12 @@ public class WorkService {
             case LibraLiteratureRequestDTO d -> workMapper.partialUpdate(d, (LibraLiterature) work);
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
+        }
+
+        if(dto.author() != null && !dto.author().isBlank()){
+            User user =userRepository.findByEmail(dto.author())
+                    .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.author()));
+            work.setAuthor(user);
         }
         return workMapper.toDTO(workRepository.save(work));
     }

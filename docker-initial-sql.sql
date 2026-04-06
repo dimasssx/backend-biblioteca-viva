@@ -182,13 +182,14 @@ CREATE TABLE public.multimedia
 );
 -- Seed data for Biblioteca Viva domain entities.
 -- Important: this script assumes tables already exist (Hibernate `ddl-auto=create` or migrations).
+-- password: 123456
 
 INSERT INTO users (id, email, name, password, role)
-VALUES ('e9f2ed4a-2f1b-462b-82c9-0caa80ea7ebf', 'aluno1@teste.com', 'aluno1', '123456', 'ALUNO'),
-       ('eca64533-6dbd-465b-863c-bb540fecdc61', 'aluno2@teste.com', 'aluno2', '123456', 'ALUNO'),
-       ('4c9f354b-0780-4cdb-b76f-d43e54ea3644', 'aluno3@teste.com', 'aluno3', '123456', 'ALUNO'),
-       ('455150bd-8e40-498c-8005-cca9cefa9099', 'professor@teste.com', 'professor', '123456', 'CURADOR'),
-       ('febc5d09-cc12-4bc0-b29c-2cde56102619', 'admin@admin.com', 'admin', '123456', 'ADMIN');
+VALUES ('e9f2ed4a-2f1b-462b-82c9-0caa80ea7ebf', 'aluno1@teste.com', 'aluno1', '$2y$10$GFIf48kDF3iZ1gDdCbKIVe2u51YJ2p9BdHhAokyEzc9CU6l0Ol/QO', 'ALUNO'),
+       ('eca64533-6dbd-465b-863c-bb540fecdc61', 'aluno2@teste.com', 'aluno2', '$2y$10$GFIf48kDF3iZ1gDdCbKIVe2u51YJ2p9BdHhAokyEzc9CU6l0Ol/QO', 'ALUNO'),
+       ('4c9f354b-0780-4cdb-b76f-d43e54ea3644', 'aluno3@teste.com', 'aluno3', '$2y$10$GFIf48kDF3iZ1gDdCbKIVe2u51YJ2p9BdHhAokyEzc9CU6l0Ol/QO', 'ALUNO'),
+       ('455150bd-8e40-498c-8005-cca9cefa9099', 'professor@teste.com', 'professor', '$2y$10$GFIf48kDF3iZ1gDdCbKIVe2u51YJ2p9BdHhAokyEzc9CU6l0Ol/QO', 'CURADOR'),
+       ('febc5d09-cc12-4bc0-b29c-2cde56102619', 'admin@admin.com', 'admin', '$2y$10$GFIf48kDF3iZ1gDdCbKIVe2u51YJ2p9BdHhAokyEzc9CU6l0Ol/QO', 'ADMIN');
 
 -- ========================================================
 -- Aluno 1: e9f2ed4a-2f1b-462b-82c9-0caa80ea7ebf
