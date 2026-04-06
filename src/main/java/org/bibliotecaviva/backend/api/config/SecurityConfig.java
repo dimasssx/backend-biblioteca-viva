@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 //TODO: comentado para facilitar testes por enquanto
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login","/api/auth/register", "/swagger-ui/**", "/scalar/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/auth/login","/auth/register", "/swagger-ui/**", "/scalar/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/work/**").permitAll() //hasAnyRole("ADMIN", "CURADOR", "ALUNO")
                         .requestMatchers(HttpMethod.POST, "/work/**").hasAnyRole("ADMIN", "CURADOR")
                         .requestMatchers(HttpMethod.PUT, "/work/**").hasAnyRole("ADMIN", "CURADOR")
