@@ -2,10 +2,25 @@ package org.bibliotecaviva.backend.persistance.repository;
 
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
+
+    //todo: se like virar classe criar um like repository
+    @Query(value = "SELECT COUNT(*) > 0 FROM likes WHERE user_id = :userId AND work_id = :workId", nativeQuery = true)
+    boolean existsLike(@Param("userId") UUID userId, @Param("workId") UUID workId);
+
+    @Modifying
+    @Query(value = "INSERT INTO likes (user_id, work_id) VALUES (:userId, :workId)", nativeQuery = true)
+    void likeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
+
+    @Modifying
+    @Query(value = "DELETE FROM likes WHERE user_id = :userId AND work_id = :workId", nativeQuery = true)
+    void unlikeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
 }

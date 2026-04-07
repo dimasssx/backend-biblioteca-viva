@@ -10,9 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -24,20 +22,25 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id ;
-
+    private UUID id;
     @Column(nullable = false)
     private String name;
-
     @Column(unique = true, nullable = false)
     private String email;
-
     @Column(nullable = false)
     private String password;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @ManyToMany //create Like class if timestamp or other atributes needed
+    @JoinTable(
+            name = "likes",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "work_id")
+
+    )
+    private Set<Work> likedWorks = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
