@@ -14,18 +14,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface WorkRepository extends  JpaRepository<Work, UUID> {
+public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Query(value = """
-    SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
-           u.name as author,
-           COUNT(l.user_id) as like_count
-    FROM obras w
-    JOIN users u ON u.id = w.users_id
-    LEFT JOIN likes l ON l.work_id = w.id
-    WHERE (:type IS NULL OR w.type = :type)
-    GROUP BY w.id, w.title, w.publication_date, w.description, w.type, w.view_count, u.name
-    """, nativeQuery = true)
+            SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
+                   u.name as author,
+                   COUNT(l.user_id) as like_count
+            FROM obras w
+            JOIN users u ON u.id = w.users_id
+            LEFT JOIN likes l ON l.work_id = w.id
+            WHERE (:type IS NULL OR w.type = :type)
+            GROUP BY w.id, w.title, w.publication_date, w.description, w.type, w.view_count, u.name
+            """, nativeQuery = true)
     List<WorkSummary> findAllSummary(@Param("type") String type);
 
     @Modifying

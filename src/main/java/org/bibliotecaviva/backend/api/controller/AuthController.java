@@ -1,17 +1,15 @@
 package org.bibliotecaviva.backend.api.controller;
 
 import lombok.RequiredArgsConstructor;
-
 import org.bibliotecaviva.backend.application.dtos.request.LoginRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.RegisterRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.LoginResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.RegisterResponseDTO;
+import org.bibliotecaviva.backend.application.services.JwtService;
+import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.enums.Role;
 import org.bibliotecaviva.backend.domain.enums.Status;
 import org.bibliotecaviva.backend.persistance.repository.UserRepository;
-import org.bibliotecaviva.backend.domain.entities.User;
-import org.bibliotecaviva.backend.application.services.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    //TODO: remover logica de serviço direto no controller
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;

@@ -38,7 +38,7 @@ public class WorkService {
     private final WorkMapper workMapper;
     private final UserRepository userRepository;
 
-    /*
+    /**
      * Puxa todos da tabela works usando uma interface com atributos específicos
      * para nao requisitar tudo do banco
      */
@@ -73,7 +73,7 @@ public class WorkService {
             liked = true;
         }
 
-        return String.format("Obra com id %s: %s com sucesso",workId, liked ? "curtida" : "descurtida");
+        return String.format("Obra com id %s: %s com sucesso", workId, liked ? "curtida" : "descurtida");
     }
 
     @Transactional
