@@ -23,9 +23,10 @@ import org.bibliotecaviva.backend.domain.exceptions.WorkAlreadyExistsException;
 import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
 import org.bibliotecaviva.backend.persistance.repository.UserRepository;
 import org.bibliotecaviva.backend.persistance.repository.WorkRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Log4j2
@@ -42,11 +43,9 @@ public class WorkService {
      * Puxa todos da tabela works usando uma interface com atributos específicos
      * para nao requisitar tudo do banco
      */
-    public List<WorkResponse> getAll(String type) {
-        return workRepository.findAllSummary(type)
-                .stream()
-                .map(workMapper::toWorkDTO)
-                .toList();
+    public Page<WorkResponse> getAll(String type, Pageable pageable) {
+        return workRepository.findAllSummary(type, pageable)
+                .map(workMapper::toWorkDTO);
     }
 
     //todo: resolver os 1 milhao de join, mandar o tipo na req ou pegar sla cachear dps se ficar pesado,

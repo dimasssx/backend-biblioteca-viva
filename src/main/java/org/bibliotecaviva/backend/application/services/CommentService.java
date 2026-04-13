@@ -7,10 +7,11 @@ import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
 import org.bibliotecaviva.backend.persistance.repository.CommentRepository;
 import org.bibliotecaviva.backend.persistance.repository.WorkRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -35,14 +36,12 @@ public class CommentService {
         return toDTO(saved);
     }
 
-    public List<CommentResponseDTO> getByWorkId(UUID workId) {
+    public Page<CommentResponseDTO> getByWorkId(UUID workId, Pageable pageable) {
         if (!workRepository.existsById(workId)) {
             throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         }
-        return commentRepository.findByWorkIdOrderByCreatedAtDesc(workId)
-                .stream()
-                .map(this::toDTO)
-                .toList();
+        return commentRepository.findByWorkIdOrderByCreatedAtDesc(workId, pageable)
+                .map(this::toDTO);
     }
 
     @Transactional

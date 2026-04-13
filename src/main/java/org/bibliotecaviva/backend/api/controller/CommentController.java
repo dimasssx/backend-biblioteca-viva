@@ -6,12 +6,14 @@ import org.bibliotecaviva.backend.application.dtos.request.CommentRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.CommentResponseDTO;
 import org.bibliotecaviva.backend.application.services.CommentService;
 import org.bibliotecaviva.backend.domain.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,8 +33,10 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentResponseDTO>> getByWorkId(@PathVariable UUID workId) {
-        return ResponseEntity.ok(commentService.getByWorkId(workId));
+    public ResponseEntity<Page<CommentResponseDTO>> getByWorkId(
+            @PathVariable UUID workId,
+            @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(commentService.getByWorkId(workId, pageable));
     }
 
     @PutMapping("/{commentId}")

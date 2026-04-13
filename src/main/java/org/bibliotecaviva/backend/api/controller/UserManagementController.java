@@ -3,13 +3,14 @@ package org.bibliotecaviva.backend.api.controller;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.response.UserResponseDTO;
 import org.bibliotecaviva.backend.application.services.UserManagementService;
-import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.enums.Status;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,14 +21,16 @@ public class UserManagementController {
 
     private final UserManagementService userManagementService;
 
-    //todo: pageable e dtos tratar enum, user disable and user locked no handler
+    //todo: dtos tratar enum, user disable and user locked no handler
     @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(@RequestParam(required = false) String status) {
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(
+            @RequestParam(required = false) String status,
+            @PageableDefault(size = 10) Pageable pageable) {
         if(status != null && !status.isBlank()){
-            return ResponseEntity.ok(userManagementService.getUsersByStatus(Enum.valueOf(Status.class, status.toUpperCase())));
+            return ResponseEntity.ok(userManagementService.getUsersByStatus(Enum.valueOf(Status.class, status.toUpperCase()), pageable));
         }
-        return ResponseEntity.ok(userManagementService.getAllUsers());
+        return ResponseEntity.ok(userManagementService.getAllUsers(pageable));
     }
 
     @PatchMapping("/approve/{id}")

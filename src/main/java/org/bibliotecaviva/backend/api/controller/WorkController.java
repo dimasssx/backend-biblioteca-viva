@@ -15,12 +15,14 @@ import org.bibliotecaviva.backend.application.dtos.response.WorkResponse;
 import org.bibliotecaviva.backend.application.dtos.response.WorkResponseDTO;
 import org.bibliotecaviva.backend.application.services.WorkService;
 import org.bibliotecaviva.backend.domain.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -32,8 +34,9 @@ public class WorkController {
 
     @GetMapping
     @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = WorkResponseDTO.class)))
-    public ResponseEntity<List<WorkResponse>> getAll(@RequestParam(required = false) String type) {
-        return ResponseEntity.ok(service.getAll(type));
+    public ResponseEntity<Page<WorkResponse>> getAll(@RequestParam(required = false) String type,
+                                                       @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(service.getAll(type, pageable));
     }
 
     @GetMapping("/{id}")
