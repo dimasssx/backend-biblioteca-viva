@@ -1,6 +1,5 @@
 package org.bibliotecaviva.backend.application.dtos.request.textual;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.*;

@@ -1,8 +1,5 @@
 package org.bibliotecaviva.backend.domain.entities;
 
-import jakarta.persistence.Column;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

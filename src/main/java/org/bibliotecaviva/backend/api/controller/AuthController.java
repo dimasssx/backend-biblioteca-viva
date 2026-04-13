@@ -11,7 +11,6 @@ import org.bibliotecaviva.backend.domain.enums.Status;
 import org.bibliotecaviva.backend.persistance.repository.UserRepository;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.application.services.JwtService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

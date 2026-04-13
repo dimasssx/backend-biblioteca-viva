@@ -1,6 +1,5 @@
 package org.bibliotecaviva.backend.domain.exceptions;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 import java.time.Instant;
