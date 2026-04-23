@@ -3,6 +3,7 @@ package org.bibliotecaviva.backend.api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -51,19 +52,16 @@ import java.util.UUID;
 )
 @ApiResponse(responseCode = "ErrorMessage", content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)),
         description = "Error message that will show when an exception is thrown")
-
 public class WorkController {
     //TODO: PATCH FOR PARTIAL UPDATES IF NEEDED
     private final WorkService service;
 
     @GetMapping
-    @Operation(description = "Return a summary of works with generic infos that are shared")
-    @Parameter(name = "type", description = "Filter by type of work (case insensitive).")
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = WorkSummaryResponseDTO.class)))
+    @ApiResponse(responseCode = "200")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid Parameter")
     public ResponseEntity<Page<WorkSummaryResponseDTO>> getAll(
             @RequestParam(required = false) WorkTypes type,
-            @PageableDefault(size = 10,sort ="publication_date",direction = Sort.Direction.DESC) Pageable pageable) {
+            @Parameter(hidden = true) @PageableDefault(size = 10,sort ="publication_date",direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(service.getAll(type, pageable));
     }
 
@@ -76,11 +74,11 @@ public class WorkController {
     }
 
     @GetMapping("/home")
+    @ApiResponse(responseCode = "200")
     public ResponseEntity<HomePageDashboardResponseDTO> getFrontPageData(){
         return ResponseEntity.ok(service.getFrontPageData());
     }
-
-
+    
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204", content = @Content, description = "No Content, successfully deleted")
     @ApiResponse(responseCode = "404", content = @Content, description = "Not Found")

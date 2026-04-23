@@ -20,6 +20,7 @@ public class BookClub {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String bookName;
+    @Column(columnDefinition = "TEXT")
     private String bookSynopses;
     private String bookAuthor;
     // private String bookCoverUrl;

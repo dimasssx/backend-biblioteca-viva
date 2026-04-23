@@ -23,4 +23,8 @@ public interface WorkSummary {
     Long getLikeCount();
 
     Long getCommentCount();
+
+    String getUrl();
+
+    Long getDuration();
 }

@@ -23,6 +23,8 @@ import org.bibliotecaviva.backend.domain.entities.visual.Art;
 import org.bibliotecaviva.backend.domain.entities.visual.Infographic;
 import org.mapstruct.*;
 
+import java.time.Duration;
+
 @Mapper(componentModel = "spring")
 public interface WorkMapper {
 
@@ -47,6 +49,10 @@ public interface WorkMapper {
         return user.getName();
     }
 
+    default Duration map(Long value) {
+        return value == null ? null : Duration.ofSeconds(value);
+
+    }
     // mapeamento pra work summary
     WorkSummaryResponseDTO toWorkSummary(WorkSummary work);
 

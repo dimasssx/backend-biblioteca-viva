@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.api.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.request.BookClubRequestDTO;
@@ -19,6 +20,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/bookclub")
 @RequiredArgsConstructor
+@Tag(name = "Book Club",
+        description = """
+                Controller that handles book club management
+                """
+)
 public class BookClubController {
     private final BookClubService bookClubService;
 
