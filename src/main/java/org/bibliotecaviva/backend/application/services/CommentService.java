@@ -94,13 +94,13 @@ public class CommentService {
         );
     }
 
-    private CommentSummaryResponseDTO toSummaryDTO(CommentSummary coment){
+    private CommentSummaryResponseDTO toSummaryDTO(CommentSummary comment) {
         return new CommentSummaryResponseDTO(
-                coment.getId(),
-                coment.getContent(),
-                coment.getUserName(),
-                coment.getWorkTitle(),
-                coment.getCreatedAt()
+                comment.getId(),
+                comment.getContent(),
+                comment.getUserName(),
+                comment.getWorkTitle(),
+                comment.getCreatedAt()
         );
     }
 

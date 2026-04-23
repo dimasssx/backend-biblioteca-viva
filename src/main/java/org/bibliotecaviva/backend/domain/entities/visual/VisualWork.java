@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.domain.entities.visual;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,5 +16,6 @@ import org.bibliotecaviva.backend.domain.entities.Work;
 @SuperBuilder
 @AllArgsConstructor
 public abstract class VisualWork extends Work {
+    @Column(columnDefinition = "TEXT")
     private String url;
 }

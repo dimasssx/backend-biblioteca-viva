@@ -23,9 +23,15 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
             SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
                    u.name as author,
                    COALESCE(lk.like_count, 0)    as like_count,
-                   COALESCE(cm.comment_count, 0) as comment_count
+                   COALESCE(cm.comment_count, 0) as comment_count,
+                    COALESCE(a.url, i.url, lt.url, mt.url) as url,
+                    COALESCE(mt.duration,lt.duration) as duration
             FROM obras w
             JOIN users u ON u.id = w.users_id
+            LEFT JOIN public.art a on w.id = a.id
+            LEFT JOIN public.infographic i on w.id = i.id
+            LEFT JOIN public.libra_literature lt on w.id =lt.id
+            LEFT JOIN multimedia mt on w.id = mt.id
             LEFT JOIN (
                 SELECT work_id, COUNT(user_id) as like_count
                 FROM likes

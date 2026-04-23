@@ -1,7 +1,7 @@
 info:
   name: Visual
   type: folder
-  seq: 2
+  seq: 7
 
 request:
   auth: inherit

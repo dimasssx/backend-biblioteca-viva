@@ -1,5 +1,6 @@
 package org.bibliotecaviva.backend.domain.entities.audiovisual;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,7 @@ import java.time.Duration;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class AudioVisualWork extends Work {
+    @Column(columnDefinition = "TEXT")
     private String url;
     @Convert(converter = DurationConverter.class)
     private Duration duration;
