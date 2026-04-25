@@ -3,7 +3,7 @@ package org.bibliotecaviva.backend.persistence.repository;
 import jakarta.transaction.Transactional;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.Work;
-import org.bibliotecaviva.backend.domain.entities.WorkSummary;
+import org.bibliotecaviva.backend.domain.entities.projections.WorkSummary;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
