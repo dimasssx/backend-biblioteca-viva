@@ -29,7 +29,7 @@ public class BookClubController {
     private final BookClubService bookClubService;
 
     @PostMapping //todo: falta permitir prof e verificar se é o dono para permitir edição e remoção
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CURADOR')")
     public ResponseEntity<BookClubResponseDTO> create(@RequestBody @Valid BookClubRequestDTO requestDTO,
                                                       @AuthenticationPrincipal User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookClubService.create(requestDTO,user));
@@ -52,7 +52,7 @@ public class BookClubController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CURADOR')")
     public ResponseEntity<BookClubResponseDTO> update(@PathVariable UUID id,
                                                       @RequestBody @Valid BookClubRequestDTO requestDTO,
                                                       @AuthenticationPrincipal User user) {
@@ -60,7 +60,7 @@ public class BookClubController {
     }
 
     @DeleteMapping("/{id}")//so admin/prof
-    @PreAuthorize("hasAnyRole('ADMIN', 'PROFESSOR')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CURADOR')")
     public ResponseEntity<Void> delete(@PathVariable UUID id,
                                        @AuthenticationPrincipal User user) {
         bookClubService.delete(id, user);

@@ -12,7 +12,7 @@ import org.bibliotecaviva.backend.application.dtos.response.audiovisual.LibraLit
 import org.bibliotecaviva.backend.application.dtos.response.audiovisual.MultimediaResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.textual.*;
 import org.bibliotecaviva.backend.application.dtos.response.visual.ArtResponseDTO;
-import org.bibliotecaviva.backend.application.dtos.response.visual.InfographicReponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.visual.InfographicResponseDTO;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.Work;
 import org.bibliotecaviva.backend.domain.entities.WorkSummary;
@@ -73,7 +73,7 @@ public interface WorkMapper {
 
     ArtResponseDTO toArtResponseDTO(Art art, Long likeCount,Long commentCount);
 
-    InfographicReponseDTO toInfographicReponseDTO(Infographic infographic, Long likeCount,Long commentCount);
+    InfographicResponseDTO toInfographicReponseDTO(Infographic infographic, Long likeCount, Long commentCount);
 
     // daqui pra baixo separar ppor classe do mapper se prcisar, ver depois
     @Mapping(target = "author", ignore = true)

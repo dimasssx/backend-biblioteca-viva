@@ -1,9 +1,8 @@
-package org.bibliotecaviva.backend.persistance.repository;
+package org.bibliotecaviva.backend.persistence.repository;
 
 import org.bibliotecaviva.backend.domain.entities.BookClub;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 

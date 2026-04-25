@@ -1,4 +1,4 @@
-package org.bibliotecaviva.backend.persistance.repository;
+package org.bibliotecaviva.backend.persistence.repository;
 
 import jakarta.transaction.Transactional;
 import org.bibliotecaviva.backend.domain.entities.User;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
