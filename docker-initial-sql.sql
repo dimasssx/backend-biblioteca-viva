@@ -34,6 +34,7 @@ CREATE TABLE public.book_club
     "date"        timestamp(6) NULL,
     "location"    varchar(255) NULL,
     organizer_id  uuid NULL,
+    book_cover_url  TEXT NULL,
     CONSTRAINT book_club_pkey PRIMARY KEY (id),
     CONSTRAINT fkj2h7pqx20fvjniqtykxi4fhjy FOREIGN KEY (organizer_id) REFERENCES public.users (id)
 );

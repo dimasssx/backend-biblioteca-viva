@@ -7,9 +7,12 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 
-public record CommentRequestDTO(
+public record BookClubReviewRequestDTO(
         @NotBlank(message = "O conteúdo do comentário não pode ser vazio")
         @Size(max = 200, message = "O comentário deve ter no máximo 200 caracteres")
-        String content
+        String content,
+        @Min(0) @Max(5)
+        BigDecimal rating
 ) {
+
 }

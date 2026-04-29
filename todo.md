@@ -1,19 +1,23 @@
 todo
 -
-- [ ] Implementar Notificações
-- [ ] Implementar RefreshToken e esqueceu a senha
-- [ ] Linkar cordel com artes
- - [ ] Mandar duração no worksummary para audiovisual
-- [ ] Implementar exclusao de conta para admin (?)
-- [ ] Verificar se vai colocar obras favoritadas por usuario
-- [ ] Verificar dados de cadastro.
-- [ ] Verificar se vai ter download, e de que, existe botao no front
-- [ ] Verificar se todas as obras tem imagem associada ou se vai ser placeholder no front
-- [ ] Verificar se precisa mesmo de contador de visualizacao
-- [ ] Clube de leitura
-    - espaço para resenhas [vai ser outro tipo de obra? ou so comentarios?]
-    - verificar se pode ter mais de 1, ou se so um professor pode organizar
 
+- [ ]  Notificações
+- [ ] Fluxo com refreshToken
+- [ ] Esqueceu a senha
+- [ ] admin,professor e autor da obra podem responder comentários
+- [ ] Mandar duração no worksummary para audiovisual, colocar a turma em obras
+- [ ] Colocar novo tipo de obra(poemas)
+- [ ] Implementar exclusao de conta / admin excluir permanentemente conta
+- [ ] Clube de leitura
+    - Comentários com avaliação escrita e nota (estrala de 1a5)
+    - limite de alunos é 25,
+    - só tem um local ( biblioteca)
+    - ter capa do livro,
+    - só um clube por mês
+- [ ] Testes
+    - Testes unitários
+    - Testes de integração
+    - Testes de interface (end-to-end)
 # Sessões do Site
 
 | Seção                      | Descrição                                                                                                                                                                                        | 
