@@ -19,6 +19,8 @@ public record InfographicRequestDTO(
         @NotBlank(message = "description cannot be blank") @Size(min = 15, message = "Description must be at least 15 characters long")
         String description,
         @URL @NotBlank(message = "URL cannot be blank") //Colocar um pattern no url para dominios especificos
-        String url
+        String url,
+        @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+        String studentClass
 ) implements WorkRequest {
 }

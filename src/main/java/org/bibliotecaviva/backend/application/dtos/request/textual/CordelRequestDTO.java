@@ -22,7 +22,8 @@ public record CordelRequestDTO(
         //TODO: ENUM PARA ESQUEMAS
         @NotBlank(message = "Rhyme scheme can not be blank")
         String rhymeScheme,
-        String artName
-        //botar auto tbm
+        String artName,
+        @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+        String studentClass
 ) implements WorkRequest {
 }

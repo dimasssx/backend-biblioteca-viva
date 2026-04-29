@@ -31,7 +31,7 @@ public abstract class Work {
     @Column(columnDefinition = "TEXT")
     private String description;
     private Long viewCount = 0L;
-
+    private String studentClass;
     public String getType() {
         return this.getClass().getAnnotation(DiscriminatorValue.class) != null
                 ? this.getClass().getAnnotation(DiscriminatorValue.class).value()

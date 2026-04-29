@@ -20,6 +20,8 @@ public record TaleRequestDTO(
         @NotBlank(message = "Content can not be blank") //Veriicar dps se coloca minimo e maximo de caracteres
         String content,
         @NotBlank(message = "Genre cannot be blank") @Size(min = 3, max = 100, message = "Genre must be between 3 and 100 characters")
-        String genre
+        String genre,
+        @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+        String studentClass
 ) implements WorkRequest {
 }

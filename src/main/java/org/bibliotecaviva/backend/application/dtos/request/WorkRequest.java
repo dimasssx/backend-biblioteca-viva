@@ -18,4 +18,6 @@ public interface WorkRequest {
     LocalDateTime publicationDate();
 
     String description();
+
+    String studentClass();
 }

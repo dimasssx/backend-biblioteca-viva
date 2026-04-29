@@ -1,14 +1,15 @@
-todo
--
+Todo-list
 
-- [ ]  Notificações
-- [ ] Fluxo com refreshToken
+- [ ] Notificações (Se precisar)
+- [ ] Fluxo com refreshToken e acessToken (Fazer em conjunto com front, e trocar por cookies)
+- [ ] Mandar duração no worksummary para audiovisual(só se n der pra pegar direto do link)
 - [ ] Esqueceu a senha
+
+, colocar a turma em obras
 - [ ] admin,professor e autor da obra podem responder comentários
-- [ ] Mandar duração no worksummary para audiovisual, colocar a turma em obras
 - [ ] Colocar novo tipo de obra(poemas)
 - [ ] Implementar exclusao de conta / admin excluir permanentemente conta
-- [ ] Clube de leitura
+- [x] Clube de leitura
     - Comentários com avaliação escrita e nota (estrala de 1a5)
     - limite de alunos é 25,
     - só tem um local ( biblioteca)

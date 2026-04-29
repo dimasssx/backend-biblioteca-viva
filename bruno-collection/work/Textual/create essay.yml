@@ -18,7 +18,8 @@ http:
         "rate": 920,  
         "theme": "Educação e Cidadania",
         "themeDescription": "Eixo temático focado na formação do indivíduo e sua atuação política e social através do conhecimento.",
-        "feedback": "Excelente articulação de ideias e repertório sociocultural diversificado. A proposta de intervenção citando as bibliotecas públicas foi o ponto alto do texto. Atenção apenas à concordância verbal no segundo parágrafo."
+        "feedback": "Excelente articulação de ideias e repertório sociocultural diversificado. A proposta de intervenção citando as bibliotecas públicas foi o ponto alto do texto. Atenção apenas à concordância verbal no segundo parágrafo.",
+        "studentClass": "Terceiro B"
       }
   auth: inherit
 

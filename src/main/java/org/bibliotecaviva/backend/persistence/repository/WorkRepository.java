@@ -21,7 +21,7 @@ import java.util.UUID;
 public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Query(value = """
-            SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
+            SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
                    u.name as author,
                    COALESCE(lk.like_count, 0)    as like_count,
                    COALESCE(cm.comment_count, 0) as comment_count,
@@ -58,7 +58,7 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
     List<Object[]> countPerType();
 
     @Query(value = """
-    SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
+    SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
            u.name as author,
            COALESCE(lk.like_count, 0) as like_count,
            COALESCE(cm.comment_count, 0) as comment_count
@@ -83,7 +83,7 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
     boolean existsWorkByAuthorAndTitle(User author, String title);
 
     @Query(value = """
-        SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,
+        SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
                    u.name as author,
                    COALESCE(lk.like_count, 0)    as like_count,
                    COALESCE(cm.comment_count, 0) as comment_count,

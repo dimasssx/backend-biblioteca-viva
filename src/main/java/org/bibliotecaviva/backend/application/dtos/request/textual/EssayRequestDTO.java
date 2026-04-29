@@ -28,6 +28,8 @@ public record EssayRequestDTO(
         @NotBlank(message = "Theme description cannot be blank")
         String themeDescription,
         @NotBlank(message = "Feedback cannot be blank")
-        String feedback
+        String feedback,
+        @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+        String studentClass
 ) implements WorkRequest {
 }

@@ -19,6 +19,8 @@ public record MultimediaRequestDTO(
                 @NotBlank(message = "description cannot be blank") @Size(min = 15, message = "Description must be at least 15 characters long") String description,
                 @URL @NotBlank // Colocar um pattern no url para dominios especificos
                 String url,
-                @NotBlank @DurationFormat(style = DurationFormat.Style.ISO8601) @Schema(example = "PT3M30S or PT5M or PT45S", description = "Duration in ISO 8601 format)") String duration)
+                @NotBlank @DurationFormat(style = DurationFormat.Style.ISO8601) @Schema(example = "PT3M30S or PT5M or PT45S", description = "Duration in ISO 8601 format)") String duration,
+                @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+                String studentClass)
                 implements WorkRequest {
 }

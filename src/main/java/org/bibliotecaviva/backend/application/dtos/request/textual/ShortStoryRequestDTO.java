@@ -18,6 +18,8 @@ public record ShortStoryRequestDTO(
         @NotBlank(message = "description cannot be blank") @Size(min = 15, message = "Description must be at least 15 characters long")
         String description,
         @NotBlank(message = "Content can not be blank") //Veriicar dps se coloca minimo e maximo de caracteres
-        String content
+        String content,
+        @NotBlank@Size(min = 3,max = 50,message = "Student class must be between 3 and 50 characters")
+        String studentClass
 ) implements WorkRequest {
 }
