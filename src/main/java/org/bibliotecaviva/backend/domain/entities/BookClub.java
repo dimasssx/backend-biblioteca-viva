@@ -38,6 +38,8 @@ public class BookClub {
     )
     private Set<User> participants = new HashSet<>();
 
+    @OneToMany(mappedBy = "bookClub", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<BookClubReview> reviews;
     //pode associar resenhas relacionadas caso sejam obras autorais como as outras. ai filtra depois as resenhas
     //pelo nome do livro
 }
