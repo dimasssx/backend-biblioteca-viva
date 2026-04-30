@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
@@ -53,7 +54,7 @@ public class BookClubService {
         var teste = bookClubRepository.findAllWithParticipantCountAndAverageRating(pageable);
         System.out.println(teste);
         return bookClubRepository.findAllWithParticipantCountAndAverageRating(pageable)
-                .map(club -> bookClubMapper.toDto((BookClub) club[0], (Long) club[1],BigDecimal.valueOf((Double) club[2]))
+                .map(club -> bookClubMapper.toDto((BookClub) club[0], (Long) club[1],BigDecimal.valueOf((Double) club[2]).setScale(2, RoundingMode.HALF_UP))
                 );
 
     }
@@ -76,6 +77,13 @@ public class BookClubService {
         var bookClub = bookClubRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Clube do livro com id " + id + " não encontrado"));
         verifyOwnership(user, bookClub);
+        //ver se podi
+        var subMonth =  requestDTO.date().toLocalDate();
+        LocalDateTime mothStart = subMonth.withDayOfMonth(1).atStartOfDay();
+        LocalDateTime monthEnd = subMonth.with(TemporalAdjusters.lastDayOfMonth()).atTime(23, 59, 59);
+        if (bookClubRepository.existsBookClubByDateBetweenAndIdNot(mothStart, monthEnd,id)) {
+            throw new ConflictException("Já existe um clube do livro agendado para este mês");
+        }
         bookClubMapper.partialUpdate(requestDTO, bookClub);
         return bookClubMapper.toDto(bookClub, bookClubRepository.countParticipants(id),bookClubRepository.getAverageRating(id));
     }

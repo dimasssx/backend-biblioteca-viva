@@ -20,11 +20,13 @@ public interface BookClubRepository extends JpaRepository<BookClub, UUID> {
     @Query(value = "SELECT COUNT(*) FROM book_club_participants WHERE book_club_id = :id", nativeQuery = true)
     Long countParticipants(UUID id);
 
-    @Query(value = "SELECT AVG(reviews.rating) FROM BookClubReview reviews WHERE reviews.bookClub.id = :id")
+    @Query(value = "SELECT coalesce(AVG(reviews.rating),5.0) FROM BookClubReview reviews WHERE reviews.bookClub.id = :id")
     BigDecimal getAverageRating(UUID id);
 
-    @Query("SELECT b, COUNT(DISTINCT p),COALESCE(AVG(reviews.rating),5) as rating FROM BookClub b LEFT JOIN b.participants p LEFT JOIN BookClubReview reviews on b = reviews.bookClub GROUP BY b")
+    @Query("SELECT b, COUNT(DISTINCT p),COALESCE(AVG(reviews.rating),5.0) as rating FROM BookClub b LEFT JOIN b.participants p LEFT JOIN BookClubReview reviews on b = reviews.bookClub GROUP BY b")
     Page<Object[]> findAllWithParticipantCountAndAverageRating(Pageable pageable);
 
     boolean existsBookClubByDateBetween(LocalDateTime dateAfter, LocalDateTime dateBefore);
+
+    boolean existsBookClubByDateBetweenAndIdNot(LocalDateTime dateAfter, LocalDateTime dateBefore, UUID id);
 }

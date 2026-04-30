@@ -24,6 +24,7 @@ public class BookClub {
     private String bookSynopses;
     private String bookAuthor;
     private LocalDateTime date;
+    @Column(columnDefinition = "TEXT")
     private String bookCoverUrl;
     private String location; // Deixar por enquanto mas ta hardcordado na biblioteca
     @ManyToOne
