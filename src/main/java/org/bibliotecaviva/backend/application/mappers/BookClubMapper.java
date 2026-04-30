@@ -15,7 +15,7 @@ public interface BookClubMapper {
     BookClub toEntity(BookClubRequestDTO bookClubRequestDTO, User organizer);
 
 
-    @Mapping(target = "organizerId", source = "bookClub.organizer")
+    @Mapping(target = "organizerName", source = "bookClub.organizer.name")
     @Mapping(target = "averageRating", source = "averageRating")
     BookClubResponseDTO toDto(BookClub bookClub, Long participantsCount, BigDecimal averageRating);
 

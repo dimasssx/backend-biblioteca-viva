@@ -7,6 +7,7 @@ public record CommentSummaryResponseDTO(
         UUID id,
         String content,
         String userName,
+        String userId,
         String workTitle,
         String workId,
         LocalDateTime createdAt

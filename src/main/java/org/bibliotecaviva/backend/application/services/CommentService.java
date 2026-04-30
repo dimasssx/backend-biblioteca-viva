@@ -99,6 +99,7 @@ public class CommentService {
                 comment.getId(),
                 comment.getContent(),
                 comment.getUserName(),
+                comment.getUserId(),
                 comment.getWorkTitle(),
                 comment.getWorkId(),
                 comment.getCreatedAt()

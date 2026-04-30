@@ -5,6 +5,7 @@ Nao precisa fazer agora:
 - [ ] Fluxo com refreshToken e acessToken (Fazer em conjunto com front, e trocar por cookies)
 - [ ] Esqueceu a senha
 -------------------------------------
+- [ ] Slug pra navegação pra perfil do usuário(precisa se ofr ter navegacao) e pra obras (mais legivel, porem desncessário)
 - [ ] Mandar duração no worksummary (se n der pra pegar direto no front)
 - [ ] admin,professor e autor da obra podem responder comentários
 - [ ] Colocar novo tipo de obra(poemas)

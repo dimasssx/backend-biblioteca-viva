@@ -80,4 +80,22 @@ public class BookClubReviewService {
     private static boolean isOwnerOrAdmin(User user, BookClubReview review) {
         return review.getUser().getId().equals(user.getId()) || user.getRole() == Role.ADMIN;
     }
+
+    public Page<ReviewSummaryResponseDTO> getAll(Pageable pageable) {
+        return reviewRepository.findAllWithUserAndBookClub(pageable).map(c ->
+                new ReviewSummaryResponseDTO(
+                        c.getId(),
+                        c.getContent(),
+                        c.getCreatedAt(),
+                        c.getRating(),
+                        c.getUserName(),
+                        c.getUserId(),
+                        c.getBookClubTitle(),
+                        c.getBookClubId()   )
+        );
+    }
+
+    public Long countReviews() {
+        return reviewRepository.count();
+    }
 }

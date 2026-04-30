@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public record BookClubResponseDTO(
         UUID id,
-        String organizerId,
+        String organizerName,
         String bookName,
         String bookSynopses,
         String bookAuthor,
