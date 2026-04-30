@@ -13,7 +13,9 @@ public interface WorkRequest {
     //Todo: Colocar verificações de dominio das urls posteriormente
     String title();
 
-    String author(); //por enqunato ta mandando email, trocar dps por matricula/cpf
+    String authorName();
+
+    String authorEmail(); //por enqunato ta mandando email, trocar dps por matricula/cpf
 
     LocalDateTime publicationDate();
 

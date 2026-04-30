@@ -1,24 +1,19 @@
 Todo-list
-
+-------------------------------------
+Nao precisa fazer agora:
 - [ ] Notificações (Se precisar)
 - [ ] Fluxo com refreshToken e acessToken (Fazer em conjunto com front, e trocar por cookies)
-- [ ] Mandar duração no worksummary para audiovisual(só se n der pra pegar direto do link)
 - [ ] Esqueceu a senha
-
-, colocar a turma em obras
+-------------------------------------
+- [ ] Mandar duração no worksummary (se n der pra pegar direto no front)
 - [ ] admin,professor e autor da obra podem responder comentários
 - [ ] Colocar novo tipo de obra(poemas)
-- [ ] Implementar exclusao de conta / admin excluir permanentemente conta
-- [x] Clube de leitura
-    - Comentários com avaliação escrita e nota (estrala de 1a5)
-    - limite de alunos é 25,
-    - só tem um local ( biblioteca)
-    - ter capa do livro,
-    - só um clube por mês
+__________________________
 - [ ] Testes
     - Testes unitários
     - Testes de integração
     - Testes de interface (end-to-end)
+------------------
 # Sessões do Site
 
 | Seção                      | Descrição                                                                                                                                                                                        | 

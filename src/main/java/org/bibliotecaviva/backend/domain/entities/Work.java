@@ -27,6 +27,7 @@ public abstract class Work {
     @ManyToOne
     @JoinColumn(name = "users_id")
     private User author;
+    private String authorName;
     private LocalDateTime publicationDate;
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -36,5 +37,8 @@ public abstract class Work {
         return this.getClass().getAnnotation(DiscriminatorValue.class) != null
                 ? this.getClass().getAnnotation(DiscriminatorValue.class).value()
                 : this.getClass().getSimpleName().toUpperCase();
+    }
+    public String resolveAuthorName(){
+        return author != null ? author.getName() : authorName;
     }
 }

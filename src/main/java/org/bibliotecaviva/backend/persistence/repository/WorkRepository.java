@@ -22,7 +22,7 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Query(value = """
             SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
-                   u.name as author,
+                   COALESCE(u.name, w.author_name) as author,
                    COALESCE(lk.like_count, 0)    as like_count,
                    COALESCE(cm.comment_count, 0) as comment_count,
                     COALESCE(a.url, i.url, lt.url, mt.url,cordel_illustration.url) as url,
@@ -59,7 +59,7 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Query(value = """
     SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
-           u.name as author,
+           COALESCE(u.name, w.author_name) as author,
            COALESCE(lk.like_count, 0) as like_count,
            COALESCE(cm.comment_count, 0) as comment_count
     FROM obras w
@@ -84,7 +84,7 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Query(value = """
         SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
-                   u.name as author,
+                  COALESCE(u.name, w.author_name) as author,
                    COALESCE(lk.like_count, 0)    as like_count,
                    COALESCE(cm.comment_count, 0) as comment_count,
                     COALESCE(a.url, i.url, lt.url, mt.url) as url,
