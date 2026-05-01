@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.response.AdminDashboardResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.CommentSummaryResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.UserResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.ReviewSummaryResponseDTO;
 import org.bibliotecaviva.backend.application.services.*;
 import org.bibliotecaviva.backend.domain.enums.Status;
 import org.springframework.data.domain.Page;

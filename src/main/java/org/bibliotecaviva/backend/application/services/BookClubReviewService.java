@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.request.BookClubReviewRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.BookClubReviewResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.ReviewSummaryResponseDTO;
 import org.bibliotecaviva.backend.domain.entities.BookClubReview;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.enums.Role;

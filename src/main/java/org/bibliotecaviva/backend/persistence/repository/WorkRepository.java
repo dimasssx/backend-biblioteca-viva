@@ -80,8 +80,6 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
     @Query(value = "SELECT COUNT(*) FROM likes WHERE work_id = :workId", nativeQuery = true)
     long getLikeCount(@Param("workId") UUID workId);
 
-    boolean existsWorkByAuthorAndTitle(User author, String title);
-
     @Query(value = """
         SELECT w.id, w.title, w.publication_date, w.description, w.type, w.view_count,w.student_class,
                   COALESCE(u.name, w.author_name) as author,
