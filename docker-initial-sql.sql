@@ -60,7 +60,7 @@ CREATE TABLE public.obras
     student_class varchar(255) NOT NULL,
     view_count       int8 DEFAULT 0 NOT NULL,
     CONSTRAINT obras_pkey PRIMARY KEY (id),
-    CONSTRAINT obras_type_check CHECK (((type)::text = ANY (ARRAY[('LibraLiterature':: character varying)::text, ('Multimedia':: character varying)::text, ('Article':: character varying)::text, ('Cordel':: character varying)::text, ('Essay':: character varying)::text, ('ShortStory':: character varying)::text, ('Tale':: character varying)::text, ('Art':: character varying)::text, ('Infographic':: character varying)::text])
+    CONSTRAINT obras_type_check CHECK (((type)::text = ANY (ARRAY[('LibraLiterature':: character varying)::text, ('Multimedia':: character varying)::text,('Poem':: character varying)::text, ('Article':: character varying)::text, ('Cordel':: character varying)::text, ('Essay':: character varying)::text, ('ShortStory':: character varying)::text, ('Tale':: character varying)::text, ('Art':: character varying)::text, ('Infographic':: character varying)::text])
 ) ),
 	CONSTRAINT fk2fptp0tpi0hv70i3cf78aev1t FOREIGN KEY (users_id) REFERENCES public.users(id)
 );

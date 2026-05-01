@@ -39,13 +39,13 @@ public interface WorkMapper {
             case Tale w -> toTaleResponseDTO(w, likeCount, commentCount);
             case Art w -> toArtResponseDTO(w, likeCount, commentCount);
             case Infographic w -> toInfographicReponseDTO(w, likeCount, commentCount);
+            case Poem w -> toPoemResponseDTO(w,likeCount,commentCount);
             default -> throw new IllegalStateException("Unexpected value: " + work);
         };
     }
 
     default Duration map(Long value) {
         return value == null ? null : Duration.ofSeconds(value);
-
     }
 
     // mapeamento pra work summary
@@ -60,6 +60,9 @@ public interface WorkMapper {
 
     @Mapping(target = "author", expression = "java(article.resolveAuthorName())")
     ArticleResponseDTO toArticleResponseDTO(Article article, Long likeCount, Long commentCount);
+
+    @Mapping(target = "author", expression = "java(poem.resolveAuthorName())")
+    ArticleResponseDTO toPoemResponseDTO(Poem poem, Long likeCount, Long commentCount);
 
     @Mapping(target = "author", expression = "java(cordel.resolveAuthorName())")
     @Mapping(target = "url", source = "cordel.illustration.url")
@@ -97,10 +100,16 @@ public interface WorkMapper {
 
     @Mapping(target = "author", ignore = true)
     Article toEntity(ArticleRequestDTO articleRequestDTO);
-
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "author", ignore = true)
     void partialUpdate(ArticleRequestDTO articleRequestDTO, @MappingTarget Article article);
+
+    @Mapping(target = "author", ignore = true)
+    Poem toEntity(PoemRequestDTO poemRequestDTO);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "author", ignore = true)
+    void partialUpdate(PoemRequestDTO poemRequestDTO, @MappingTarget Poem poem);
 
     @Mapping(target = "author", ignore = true)
     Cordel toEntity(CordelRequestDTO cordelRequestDTO);

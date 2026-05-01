@@ -86,6 +86,7 @@ public class WorkService {
             case InfographicRequestDTO d -> workMapper.toEntity(d);
             case MultimediaRequestDTO d -> workMapper.toEntity(d);
             case LibraLiteratureRequestDTO d -> workMapper.toEntity(d);
+            case PoemRequestDTO d -> workMapper.toEntity(d);
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         };
@@ -125,6 +126,7 @@ public class WorkService {
             case InfographicRequestDTO d -> workMapper.partialUpdate(d, (Infographic) work);
             case MultimediaRequestDTO d -> workMapper.partialUpdate(d, (Multimedia) work);
             case LibraLiteratureRequestDTO d -> workMapper.partialUpdate(d, (LibraLiterature) work);
+            case PoemRequestDTO d -> workMapper.partialUpdate(d, (Poem) work);
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         }
@@ -204,6 +206,7 @@ public class WorkService {
                 counts.getOrDefault("Tale", 0L).intValue(),
                 counts.getOrDefault("Art", 0L).intValue(),
                 counts.getOrDefault("Infographic", 0L).intValue(),
+                counts.getOrDefault("Poem", 0L).intValue(),
                 works,
                 mostLikes);
     }

@@ -7,15 +7,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.bibliotecaviva.backend.application.dtos.request.textual.PoemRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.LibraLiteratureRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.audiovisual.MultimediaRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.textual.*;
 import org.bibliotecaviva.backend.application.dtos.request.visual.ArtRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.request.visual.InfographicRequestDTO;
-import org.bibliotecaviva.backend.application.dtos.response.HomePageDashboardResponseDTO;
-import org.bibliotecaviva.backend.application.dtos.response.LikeResponseDTO;
-import org.bibliotecaviva.backend.application.dtos.response.WorkResponse;
-import org.bibliotecaviva.backend.application.dtos.response.WorkSummaryResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.*;
 import org.bibliotecaviva.backend.application.dtos.response.audiovisual.LibraLiteratureResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.audiovisual.MultimediaResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.textual.*;
@@ -106,6 +104,25 @@ public class WorkController {
                                                   @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(service.unLike(id, user));
     }
+
+    @PostMapping("/poems")
+    @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = PoemResponseDTO.class)), description = "Created")
+    @ApiResponse(responseCode = "409", content = @Content, description = "Work Already Exists")
+    @ApiResponse(responseCode = "404", content = @Content, description = "Author Not Found")
+    @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
+    public ResponseEntity<WorkResponse> createPoem(@RequestBody @Valid PoemRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
+    }
+
+    @PutMapping("/poems/{id}")
+    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PoemResponseDTO.class)), description = "Updated")
+    @ApiResponse(responseCode = "409", content = @Content, description = "Work Already Exists")
+    @ApiResponse(responseCode = "404", content = @Content, description = "Wokr or Author Not Found")
+    @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
+    public ResponseEntity<WorkResponse> updatePoem(@PathVariable UUID id, @RequestBody @Valid PoemRequestDTO dto) {
+        return ResponseEntity.ok(service.update(id, dto));
+    }
+
 
     @PostMapping("/articles")
     @ApiResponse(responseCode = "201", content = @Content(schema = @Schema(implementation = ArticleResponseDTO.class)), description = "Created")
