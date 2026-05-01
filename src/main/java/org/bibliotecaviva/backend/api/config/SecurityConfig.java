@@ -34,6 +34,7 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     @Value("${security.cors.allowed-origins}")
     private List<String> allowedOrigins;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -44,9 +45,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/bookclub/*/subscribe", "/bookclub/*/unsubscribe")
                         .authenticated()
 
-                        .requestMatchers(HttpMethod.POST, "/bookclub/*").hasAnyRole("ADMIN","CURADOR")
-                        .requestMatchers(HttpMethod.PUT, "/bookclub/*").hasAnyRole("ADMIN","CURADOR")
-                        .requestMatchers(HttpMethod.DELETE, "/bookclub/*").hasAnyRole("ADMIN","CURADOR")
+                        .requestMatchers(HttpMethod.POST, "/bookclub/*").hasAnyRole("ADMIN", "CURADOR")
+                        .requestMatchers(HttpMethod.PUT, "/bookclub/*").hasAnyRole("ADMIN", "CURADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/bookclub/*").hasAnyRole("ADMIN", "CURADOR")
 
                         .requestMatchers(HttpMethod.PUT, "/work/*/comments/*").hasAnyRole("ADMIN", "CURADOR", "ALUNO")
                         .requestMatchers(HttpMethod.DELETE, "/work/*/comments/*")

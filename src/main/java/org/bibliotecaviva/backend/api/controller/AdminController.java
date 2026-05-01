@@ -77,14 +77,14 @@ public class AdminController {
     @GetMapping("/comments")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiResponse(responseCode = "200", description = "Comments retrieved successfully")
-    public ResponseEntity<Page<CommentSummaryResponseDTO>> getAllComments(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<CommentSummaryResponseDTO>> getAllComments(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(commentService.getAll(pageable));
     }
 
     @GetMapping("/reviews")
     @PreAuthorize("hasRole('ADMIN')")
     @ApiResponse(responseCode = "200", description = "BookClub reviews retrieved successfully")
-    public ResponseEntity<Page<ReviewSummaryResponseDTO>> getAllReviews(@PageableDefault(sort = "createdAt",direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<ReviewSummaryResponseDTO>> getAllReviews(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(bookClubReviewService.getAll(pageable));
     }
 

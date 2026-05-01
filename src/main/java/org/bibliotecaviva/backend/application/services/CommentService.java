@@ -77,11 +77,11 @@ public class CommentService {
         
         boolean isOwner = comment.getUser().getId().equals(user.getId());
         boolean isAdmin = user.getRole() == Role.ADMIN;
-        
+
         if(!isOwner && !isAdmin) {
             throw new AccessDeniedException("Você não pode deletar este comentário");
         }
-        commentRepository.deleteById(commentId);
+        commentRepository.delete(comment);
     }
 
     //usar filtrando já por work

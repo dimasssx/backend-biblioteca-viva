@@ -38,8 +38,23 @@ public class BookClubReviewService {
                 .map(this::toDTO);
     }
 
-    public BookClubReviewResponseDTO update(UUID reviewId, User user, @Valid BookClubReviewRequestDTO dto) {
-        var review = reviewRepository.findById(reviewId).orElseThrow(() -> new CommentNotFoundException("Comentário com id " + reviewId + " não encontrado"));
+    public Page<ReviewSummaryResponseDTO> getAll(Pageable pageable) {
+        return reviewRepository.findAllWithUserAndBookClub(pageable).map(c ->
+                new ReviewSummaryResponseDTO(
+                        c.getId(),
+                        c.getContent(),
+                        c.getCreatedAt(),
+                        c.getRating(),
+                        c.getUserName(),
+                        c.getUserId(),
+                        c.getBookClubTitle(),
+                        c.getBookClubId())
+        );
+    }
+
+    public BookClubReviewResponseDTO update(UUID reviewId, UUID bookClubId, User user, @Valid BookClubReviewRequestDTO dto) {
+        var review = reviewRepository.findByIdAndBookClub_Id(reviewId, bookClubId)
+                .orElseThrow(() -> new CommentNotFoundException("Comentário com id " + reviewId + " não encontrado."));
 
         if (isOwnerOrAdmin(user, review)) {
             review.setContent(dto.content());
@@ -50,8 +65,10 @@ public class BookClubReviewService {
         }
     }
 
-    public void delete(UUID commentId, User user) {
-        var review = reviewRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException("Comentário com id " + commentId + " não encontrado"));
+    public void delete(UUID commentId, UUID bookClubId, User user) {
+        var review = reviewRepository.findByIdAndBookClub_Id(commentId, bookClubId)
+                .orElseThrow(() -> new CommentNotFoundException("Comentário com id " + commentId + " não encontrado"));
+
         if (isOwnerOrAdmin(user, review)) {
             reviewRepository.delete(review);
         } else {
@@ -79,20 +96,6 @@ public class BookClubReviewService {
 
     private static boolean isOwnerOrAdmin(User user, BookClubReview review) {
         return review.getUser().getId().equals(user.getId()) || user.getRole() == Role.ADMIN;
-    }
-
-    public Page<ReviewSummaryResponseDTO> getAll(Pageable pageable) {
-        return reviewRepository.findAllWithUserAndBookClub(pageable).map(c ->
-                new ReviewSummaryResponseDTO(
-                        c.getId(),
-                        c.getContent(),
-                        c.getCreatedAt(),
-                        c.getRating(),
-                        c.getUserName(),
-                        c.getUserId(),
-                        c.getBookClubTitle(),
-                        c.getBookClubId()   )
-        );
     }
 
     public Long countReviews() {

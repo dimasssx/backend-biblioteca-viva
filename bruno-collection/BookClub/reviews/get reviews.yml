@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{api_url}}bookclub/{{bookclub_id}}/comments"
+  url: "{{api_url}}bookclub/{{bookclub_id}}/reviews"
   auth: inherit
 
 runtime:

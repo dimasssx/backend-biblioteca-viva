@@ -94,7 +94,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<LikeResponseDTO> likeWork(@PathVariable UUID id,
-            @AuthenticationPrincipal User user) {
+                                                    @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(service.like(id, user));
     }
 
@@ -103,7 +103,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<LikeResponseDTO> unLike(@PathVariable UUID id,
-            @AuthenticationPrincipal User user) {
+                                                  @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(service.unLike(id, user));
     }
 
@@ -122,7 +122,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Work or Author Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<WorkResponse> updateArticle(@PathVariable UUID id,
-            @RequestBody @Valid ArticleRequestDTO dto) {
+                                                      @RequestBody @Valid ArticleRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
@@ -177,7 +177,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Work or Author Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<WorkResponse> updateShortStory(@PathVariable UUID id,
-            @RequestBody @Valid ShortStoryRequestDTO dto) {
+                                                         @RequestBody @Valid ShortStoryRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
@@ -232,7 +232,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Work or Author Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<WorkResponse> updateInfographic(@PathVariable UUID id,
-            @RequestBody @Valid InfographicRequestDTO dto) {
+                                                          @RequestBody @Valid InfographicRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
@@ -251,7 +251,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Work or Author Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<WorkResponse> updateMultimedia(@PathVariable UUID id,
-            @RequestBody @Valid MultimediaRequestDTO dto) {
+                                                         @RequestBody @Valid MultimediaRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 
@@ -270,7 +270,7 @@ public class WorkController {
     @ApiResponse(responseCode = "404", content = @Content, description = "Work or Author Not Found")
     @ApiResponse(responseCode = "400", content = @Content, description = "Invalid ID")
     public ResponseEntity<WorkResponse> updateLibraLiterature(@PathVariable UUID id,
-            @RequestBody @Valid LibraLiteratureRequestDTO dto) {
+                                                              @RequestBody @Valid LibraLiteratureRequestDTO dto) {
         return ResponseEntity.ok(service.update(id, dto));
     }
 }

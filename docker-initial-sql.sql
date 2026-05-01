@@ -189,7 +189,7 @@ VALUES ('e9f2ed4a-2f1b-462b-82c9-0caa80ea7ebf', 'aluno1@teste.com', 'aluno1',
 -- Aluno 1: e9f2ed4a-2f1b-462b-82c9-0caa80ea7ebf
 -- Aluno 2: eca64533-6dbd-465b-863c-bb540fecdc61
 -- Aluno 3: 4c9f354b-0780-4cdb-b76f-d43e54ea3644
--- Professor: 455150bd-8e40-498c-8005-cca9cefa909
+-- Professor: 455150bd-8e40-498c-8005-cca9cefa9099
 -- ========================================================
 
 

@@ -13,7 +13,6 @@ import org.bibliotecaviva.backend.application.dtos.response.audiovisual.Multimed
 import org.bibliotecaviva.backend.application.dtos.response.textual.*;
 import org.bibliotecaviva.backend.application.dtos.response.visual.ArtResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.visual.InfographicResponseDTO;
-import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.Work;
 import org.bibliotecaviva.backend.domain.entities.audiovisual.LibraLiterature;
 import org.bibliotecaviva.backend.domain.entities.audiovisual.Multimedia;
@@ -48,6 +47,7 @@ public interface WorkMapper {
         return value == null ? null : Duration.ofSeconds(value);
 
     }
+
     // mapeamento pra work summary
     WorkSummaryResponseDTO toWorkSummary(WorkSummary work);
 

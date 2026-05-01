@@ -23,7 +23,6 @@ import org.bibliotecaviva.backend.domain.entities.visual.Art;
 import org.bibliotecaviva.backend.domain.entities.visual.Infographic;
 import org.bibliotecaviva.backend.domain.enums.WorkTypes;
 import org.bibliotecaviva.backend.domain.exceptions.UserNotFoundException;
-import org.bibliotecaviva.backend.domain.exceptions.WorkAlreadyExistsException;
 import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.CommentRepository;
 import org.bibliotecaviva.backend.persistence.repository.UserRepository;
@@ -97,11 +96,11 @@ public class WorkService {
         }
 
         if (dto.authorEmail() != null && dto.authorName() == null) {
-           var user = userRepository.findByEmail(dto.authorEmail())
+            var user = userRepository.findByEmail(dto.authorEmail())
                     .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.authorEmail()));
             work.setAuthor(user);
         } else {
-           work.setAuthorName(dto.authorName());
+            work.setAuthorName(dto.authorName());
         }
         work.setViewCount(0L);
 
@@ -134,9 +133,12 @@ public class WorkService {
             var user = userRepository.findByEmail(dto.authorEmail())
                     .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.authorEmail()));
             work.setAuthor(user);
+            work.setAuthorName(null);
         } else {
             work.setAuthorName(dto.authorName());
+            work.setAuthor(null);
         }
+
         if (work instanceof Cordel) {
             var arte = (Art) workRepository.findWorkByTitle(((CordelRequestDTO) dto).artName())
                     .orElseThrow(() -> new WorkNotFoundException("Obra de arte com nome " + ((CordelRequestDTO) dto).artName() + " não encontrada"));
