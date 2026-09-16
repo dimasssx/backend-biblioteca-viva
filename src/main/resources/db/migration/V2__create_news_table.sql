@@ -9,11 +9,11 @@ CREATE TABLE IF NOT EXISTS public.news (
     title       varchar(255) NOT NULL,
     content     text         NOT NULL,
     image_url   text         NULL,
-    author_id   uuid         NOT NULL,
+    author_id   uuid         NULL,
     created_at  timestamp(6) NOT NULL,
     updated_at  timestamp(6) NULL,
     CONSTRAINT news_pkey PRIMARY KEY (id),
-    CONSTRAINT fk_news_author FOREIGN KEY (author_id) REFERENCES public.users (id)
+    CONSTRAINT fk_news_author FOREIGN KEY (author_id) REFERENCES public.users (id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_news_created_at ON public.news (created_at DESC);

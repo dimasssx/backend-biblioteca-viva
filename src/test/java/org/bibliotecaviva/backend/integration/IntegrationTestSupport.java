@@ -7,12 +7,15 @@ import org.bibliotecaviva.backend.application.services.JwtService;
 import org.bibliotecaviva.backend.domain.entities.BookClub;
 import org.bibliotecaviva.backend.domain.entities.BookClubReview;
 import org.bibliotecaviva.backend.domain.entities.Comment;
+import org.bibliotecaviva.backend.domain.entities.CommentReply;
+import org.bibliotecaviva.backend.domain.entities.News;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.textual.Article;
 import org.bibliotecaviva.backend.domain.enums.Role;
 import org.bibliotecaviva.backend.domain.enums.Status;
 import org.bibliotecaviva.backend.persistence.repository.BookClubRepository;
 import org.bibliotecaviva.backend.persistence.repository.BookClubReviewRepository;
+import org.bibliotecaviva.backend.persistence.repository.CommentReplyRepository;
 import org.bibliotecaviva.backend.persistence.repository.CommentRepository;
 import org.bibliotecaviva.backend.persistence.repository.NewsRepository;
 import org.bibliotecaviva.backend.persistence.repository.UserRepository;
@@ -65,6 +68,9 @@ abstract class IntegrationTestSupport {
     protected NewsRepository newsRepository;
 
     @Autowired
+    protected CommentReplyRepository commentReplyRepository;
+
+    @Autowired
     protected PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -109,6 +115,7 @@ abstract class IntegrationTestSupport {
         Article article = Article.builder()
                 .title(title)
                 .author(author)
+                .studentClass("Turma A")
                 .publicationDate(LocalDateTime.now().minusDays(1))
                 .description("Descricao valida para teste")
                 .content("Conteudo do artigo")
@@ -149,6 +156,27 @@ abstract class IntegrationTestSupport {
                 .bookClub(bookClub)
                 .build();
         return bookClubReviewRepository.saveAndFlush(review);
+    }
+
+    protected CommentReply createCommentReplyInDatabase(User user, Comment comment, String content) {
+        CommentReply reply = CommentReply.builder()
+                .user(user)
+                .comment(comment)
+                .content(content)
+                .createdAt(LocalDateTime.now())
+                .build();
+        comment.setReply(reply);
+        return commentReplyRepository.saveAndFlush(reply);
+    }
+
+    protected News createNewsInDatabase(User author, String title) {
+        News news = News.builder()
+                .title(title)
+                .content("Conteudo da noticia de teste")
+                .author(author)
+                .createdAt(LocalDateTime.now())
+                .build();
+        return newsRepository.saveAndFlush(news);
     }
 
     protected String bearer(User user) {

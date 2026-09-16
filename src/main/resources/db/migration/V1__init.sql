@@ -237,7 +237,7 @@ CREATE TABLE public.comment_replies
     CONSTRAINT fk_comment_replies_comment FOREIGN KEY (comment_id)
         REFERENCES public.comments (id) ON DELETE CASCADE,
     CONSTRAINT fk_comment_replies_user FOREIGN KEY (user_id)
-        REFERENCES public.users (id)
+        REFERENCES public.users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE public.comment_likes

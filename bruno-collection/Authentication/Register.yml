@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{api_url}}auth/me"
+  url: "{{api_url}}auth/register/aluno"
   body:
     type: json
     data: |-

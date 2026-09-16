@@ -1,10 +1,17 @@
 package org.bibliotecaviva.backend.integration;
 
+import org.bibliotecaviva.backend.domain.entities.Comment;
+import org.bibliotecaviva.backend.domain.entities.CommentReply;
+import org.bibliotecaviva.backend.domain.entities.News;
 import org.bibliotecaviva.backend.domain.entities.User;
+import org.bibliotecaviva.backend.domain.entities.textual.Article;
 import org.bibliotecaviva.backend.domain.enums.Role;
 import org.bibliotecaviva.backend.domain.enums.Status;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,5 +90,42 @@ class UserControllerIntegrationTest extends IntegrationTestSupport {
                         .header("Authorization", bearer(student))
                         .queryParam("email", target.getEmail()))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void adminShouldDeleteUserWithNewsAndPreserveNewsWithNullAuthor() throws Exception {
+        User admin = createActiveAdmin();
+        User curator = createActiveCurator();
+        News news = createNewsInDatabase(curator, uniqueTitle("Noticia"));
+        flushAndClear();
+
+        mockMvc.perform(delete("/admin/users/{id}", curator.getId())
+                        .header("Authorization", bearer(admin)))
+                .andExpect(status().isNoContent());
+        flushAndClear();
+
+        assertTrue(userRepository.findById(curator.getId()).isEmpty());
+        News persistedNews = newsRepository.findById(news.getId()).orElseThrow();
+        assertNull(persistedNews.getAuthor());
+    }
+
+    @Test
+    void adminShouldDeleteUserWithRepliesToThirdPartyComments() throws Exception {
+        User admin = createActiveAdmin();
+        User curator = createActiveCurator();
+        User student = createActiveStudent();
+        Article work = createArticleInDatabase(admin, uniqueTitle("Obra"));
+        Comment studentComment = createCommentInDatabase(student, work, "Comentario de aluno");
+        CommentReply curatorReply = createCommentReplyInDatabase(curator, studentComment, "Resposta do curador");
+        flushAndClear();
+
+        mockMvc.perform(delete("/admin/users/{id}", curator.getId())
+                        .header("Authorization", bearer(admin)))
+                .andExpect(status().isNoContent());
+        flushAndClear();
+
+        assertTrue(userRepository.findById(curator.getId()).isEmpty());
+        assertTrue(commentReplyRepository.findById(curatorReply.getId()).isEmpty());
+        assertTrue(commentRepository.findById(studentComment.getId()).isPresent());
     }
 }

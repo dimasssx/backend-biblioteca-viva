@@ -3,6 +3,8 @@ package org.bibliotecaviva.backend.integration;
 import org.bibliotecaviva.backend.domain.entities.BookClub;
 import org.bibliotecaviva.backend.domain.entities.BookClubReview;
 import org.bibliotecaviva.backend.domain.entities.Comment;
+import org.bibliotecaviva.backend.domain.entities.CommentReply;
+import org.bibliotecaviva.backend.domain.entities.News;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.textual.Article;
 import org.bibliotecaviva.backend.domain.enums.Status;
@@ -97,6 +99,8 @@ class AdminControllerIntegrationTest extends IntegrationTestSupport {
                 bookClub,
                 "Resenha do usuario removido",
                 BigDecimal.valueOf(4));
+        News targetNews = createNewsInDatabase(target, uniqueTitle("Noticia"));
+        CommentReply targetReply = createCommentReplyInDatabase(target, otherComment, "Resposta ao comentário de outro usuario");
         userRepository.likeWork(target.getId(), likedWork.getId());
         commentRepository.likeComment(target.getId(), otherComment.getId());
         commentRepository.likeComment(student.getId(), targetComment.getId());
@@ -118,6 +122,9 @@ class AdminControllerIntegrationTest extends IntegrationTestSupport {
         var persistedClub = bookClubRepository.findById(bookClub.getId()).orElseThrow();
         assertNull(persistedClub.getOrganizer());
         assertEquals(0L, bookClubRepository.countParticipants(bookClub.getId()));
+        var persistedNews = newsRepository.findById(targetNews.getId()).orElseThrow();
+        assertNull(persistedNews.getAuthor());
+        assertTrue(commentReplyRepository.findById(targetReply.getId()).isEmpty());
     }
 
     @Test

@@ -12,7 +12,9 @@ import org.bibliotecaviva.backend.domain.exceptions.AccountNotPendingException;
 import org.bibliotecaviva.backend.domain.exceptions.UserNotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.BookClubRepository;
 import org.bibliotecaviva.backend.persistence.repository.BookClubReviewRepository;
+import org.bibliotecaviva.backend.persistence.repository.CommentReplyRepository;
 import org.bibliotecaviva.backend.persistence.repository.CommentRepository;
+import org.bibliotecaviva.backend.persistence.repository.NewsRepository;
 import org.bibliotecaviva.backend.persistence.repository.RefreshTokenRepository;
 import org.bibliotecaviva.backend.persistence.repository.UserRepository;
 import org.bibliotecaviva.backend.persistence.repository.WorkRepository;
@@ -35,6 +37,8 @@ public class UserManagementService {
     private final CommentRepository commentRepository;
     private final BookClubRepository bookClubRepository;
     private final BookClubReviewRepository bookClubReviewRepository;
+    private final NewsRepository newsRepository;
+    private final CommentReplyRepository commentReplyRepository;
 
     /**
      * @param id Acepts any status, since blocked and rejected can change to approved(active status)
@@ -82,6 +86,7 @@ public class UserManagementService {
     public void deleteUser(UUID id) {
         var user = getUser(id);
 
+        commentReplyRepository.deleteAllByUserId(id);
         commentRepository.deleteLikesFromCommentsByUserId(id);
         commentRepository.deleteAllByUserId(id);
         bookClubReviewRepository.deleteAllByUserId(id);
@@ -90,6 +95,7 @@ public class UserManagementService {
         bookClubRepository.deleteParticipantLinksByUserId(id);
         bookClubRepository.clearOrganizerByUserId(id);
         workRepository.detachAuthorByUserId(id, user.getName());
+        newsRepository.clearAuthorByUserId(id);
 
         userRepository.delete(user);
     }

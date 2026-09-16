@@ -11,7 +11,9 @@ import org.bibliotecaviva.backend.domain.exceptions.AccountNotPendingException;
 import org.bibliotecaviva.backend.domain.exceptions.UserNotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.BookClubRepository;
 import org.bibliotecaviva.backend.persistence.repository.BookClubReviewRepository;
+import org.bibliotecaviva.backend.persistence.repository.CommentReplyRepository;
 import org.bibliotecaviva.backend.persistence.repository.CommentRepository;
+import org.bibliotecaviva.backend.persistence.repository.NewsRepository;
 import org.bibliotecaviva.backend.persistence.repository.RefreshTokenRepository;
 import org.bibliotecaviva.backend.persistence.repository.UserRepository;
 import org.bibliotecaviva.backend.persistence.repository.WorkRepository;
@@ -59,6 +61,12 @@ class UserManagementServiceTest {
 
     @Mock
     private BookClubReviewRepository bookClubReviewRepository;
+
+    @Mock
+    private NewsRepository newsRepository;
+
+    @Mock
+    private CommentReplyRepository commentReplyRepository;
 
     @InjectMocks
     private UserManagementService userManagementService;
@@ -152,6 +160,7 @@ class UserManagementServiceTest {
 
         userManagementService.deleteUser(id);
 
+        verify(commentReplyRepository).deleteAllByUserId(id);
         verify(commentRepository).deleteLikesFromCommentsByUserId(id);
         verify(commentRepository).deleteAllByUserId(id);
         verify(bookClubReviewRepository).deleteAllByUserId(id);
@@ -160,6 +169,7 @@ class UserManagementServiceTest {
         verify(bookClubRepository).deleteParticipantLinksByUserId(id);
         verify(bookClubRepository).clearOrganizerByUserId(id);
         verify(workRepository).detachAuthorByUserId(id, user.getName());
+        verify(newsRepository).clearAuthorByUserId(id);
         verify(userRepository).delete(user);
     }
 

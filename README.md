@@ -27,6 +27,16 @@ Skipping a migration usually shows up as a constraint violation on insert, not
 as a startup error.
 
 
+## Testes
+
+Execute `./mvnw test` para rodar a suíte com H2, incluindo os cenários de
+exclusão de usuários em `UserControllerIntegrationTest`. Esses testes estendem
+`IntegrationTestSupport` e usam seus utilitários e transações, sem depender de
+um PostgreSQL externo.
+
+A imagem PostgreSQL de produção permanece fixada em `postgres:16`. Mudanças de
+versão principal exigem um procedimento explícito de migração dos dados.
+
 ## Docs
 
 After the app is running, open for documentation:
