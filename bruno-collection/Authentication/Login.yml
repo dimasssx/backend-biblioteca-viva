@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "email":"aluno3@teste.com",
+        "email":"aluno1@teste.com",
         "password": "123456"
       }
 
@@ -18,14 +18,35 @@ runtime:
   scripts:
     - type: after-response
       code: |-
-        const data = res.getBody();
-        bru.setGlobalEnvVar("auth_token", data.token);
+        if (res.body) {
+
+          const token = res.body.accessToken
+          if (token) {
+            bru.setGlobalEnvVar("access_token", token);
+          }
+        }
+
+        const rawCookie = res.getHeader('set-cookie');
+
+        if (rawCookie) {
+          let cookieHeaderValue = '';
+
+          if (Array.isArray(rawCookie)) {
+
+            cookieHeaderValue = rawCookie.map(c => c.split(';')[0]).join('; ');
+          } else {
+            cookieHeaderValue = rawCookie.split(';')[0];
+          }
+
+          bru.setGlobalEnvVar("session_cookie", cookieHeaderValue);
+        }
 
 settings:
   encodeUrl: true
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
 
 docs: |-
   # Login

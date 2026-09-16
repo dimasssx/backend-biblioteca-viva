@@ -31,6 +31,7 @@ jobs:
         run: ./mvnw -B clean test -Dspring.profiles.active=test
 
       - name: Cache SonarQube packages
+        if: github.event_name != 'pull_request'
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
@@ -38,6 +39,8 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Executar Testes e Análise Sonar
+        # Fork pull requests do not have access to SONAR_TOKEN.
+        if: github.event_name != 'pull_request'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >

@@ -156,6 +156,46 @@ class BookClubControllerIntegrationTest extends IntegrationTestSupport {
     }
 
     @Test
+    void studentShouldNotBeAbleToCreateBookClub() throws Exception {
+        User student = createActiveStudent();
+        Map<String, Object> payload = bookClubPayload("Capitães da Areia", futureDate(8));
+
+        mockMvc.perform(post("/bookclub")
+                        .header("Authorization", bearer(student))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(payload)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void curatorShouldBeAbleToCreateBookClub() throws Exception {
+        User curator = createActiveCurator();
+        Map<String, Object> payload = bookClubPayload("Vidas Secas", futureDate(9));
+
+        mockMvc.perform(post("/bookclub")
+                        .header("Authorization", bearer(curator))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(payload)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.bookName").value("Vidas Secas"))
+                .andExpect(jsonPath("$.organizerName").value(curator.getName()));
+    }
+
+    @Test
+    void adminShouldBeAbleToCreateBookClub() throws Exception {
+        User admin = createActiveAdmin();
+        Map<String, Object> payload = bookClubPayload("Grande Sertão: Veredas", futureDate(10));
+
+        mockMvc.perform(post("/bookclub")
+                        .header("Authorization", bearer(admin))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json(payload)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.bookName").value("Grande Sertão: Veredas"))
+                .andExpect(jsonPath("$.organizerName").value(admin.getName()));
+    }
+
+    @Test
     void anonymousUserShouldNotCreateBookClub() throws Exception {
         mockMvc.perform(post("/bookclub")
                         .contentType(MediaType.APPLICATION_JSON)

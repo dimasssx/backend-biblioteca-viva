@@ -15,9 +15,12 @@ config:
       bypassProxy: ""
 
 request:
+  headers:
+    - name: Cookie
+      value: "{{session_cookie}}"
   auth:
     type: bearer
-    token: "{{auth_token}}"
+    token: "{{access_token}}"
 bundled: false
 extensions:
   bruno:
