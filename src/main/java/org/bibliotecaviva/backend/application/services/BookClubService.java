@@ -134,8 +134,8 @@ public class BookClubService {
         var organizer = bookClub.getOrganizer();
         var participants = bookClub.getParticipants().stream().map(User::getName).toList();
 
-        return new BookClubParticipants(organizer.getName(),
+        return new BookClubParticipants(
+                organizer != null ? organizer.getName() : null,
                 participants);
-
     }
 }

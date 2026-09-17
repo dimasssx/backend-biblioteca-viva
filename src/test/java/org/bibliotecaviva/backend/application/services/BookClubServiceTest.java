@@ -32,6 +32,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -299,6 +300,21 @@ class BookClubServiceTest {
         when(bookClubRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> bookClubService.getParticipants(id));
+    }
+
+    @Test
+    void getParticipantsShouldReturnNullOrganizerWhenOrganizerWasDeleted() {
+        UUID id = UUID.randomUUID();
+        User student = buildUser(UUID.randomUUID(), Role.ALUNO);
+        student.setName("Carlos");
+        BookClub club = buildBookClub(id, null, LocalDateTime.now().plusDays(5));
+        club.getParticipants().add(student);
+        when(bookClubRepository.findById(id)).thenReturn(Optional.of(club));
+
+        var response = bookClubService.getParticipants(id);
+
+        assertNull(response.organizer());
+        assertEquals(List.of("Carlos"), response.students());
     }
 
     @Test
