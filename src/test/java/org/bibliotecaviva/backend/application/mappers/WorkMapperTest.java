@@ -1,6 +1,6 @@
 package org.bibliotecaviva.backend.application.mappers;
 
-import org.bibliotecaviva.backend.application.dtos.response.textual.ArticleResponseDTO;
+import org.bibliotecaviva.backend.application.dtos.response.PoemResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.textual.CordelResponseDTO;
 import org.bibliotecaviva.backend.application.dtos.response.textual.OtherResponseDTO;
 import org.bibliotecaviva.backend.domain.entities.textual.Cordel;
@@ -47,7 +47,7 @@ class WorkMapperTest {
     }
 
     @Test
-    void poemShouldBeDispatchedAndMapCommonWorkFields() {
+    void poemShouldMapCommonAndSpecificFields() {
         Poem poem = Poem.builder().id(UUID.randomUUID()).title("Poem").authorName("Poet")
                 .publicationDate(LocalDateTime.now().minusDays(1)).description("Poem description")
                 .content("Poem content").studentClass("Class A").viewCount(7L)
@@ -55,8 +55,9 @@ class WorkMapperTest {
 
         var response = mapper.toDTO(poem, 3L, 1L);
 
-        assertInstanceOf(ArticleResponseDTO.class, response);
-        ArticleResponseDTO poemResponse = (ArticleResponseDTO) response;
+        PoemResponseDTO poemResponse = assertInstanceOf(PoemResponseDTO.class, response);
+        assertEquals("AABB", poemResponse.rhymeScheme());
+        assertEquals("Sonnet", poemResponse.poemType());
         assertEquals(poem.getId(), poemResponse.id());
         assertEquals("Poem", poemResponse.title());
         assertEquals("Poet", poemResponse.author());

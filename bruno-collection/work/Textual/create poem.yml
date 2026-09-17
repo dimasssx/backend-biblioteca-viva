@@ -26,3 +26,7 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  A resposta inclui os campos comuns de obra e os campos rhymeScheme e poemType.
+  GET /work/{id} e PUT /work/poems/{id} também retornam esses campos.

@@ -143,13 +143,14 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
 
         UUID id = UUID.fromString(jsonFrom(createResult.andReturn()).get("id").asText());
 
-        mockMvc.perform(get("/work/" + id))
+        var getResult = mockMvc.perform(get("/work/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id.toString()))
                 .andExpect(jsonPath("$.title").value(title))
                 .andExpect(jsonPath("$.type").value(spec.type()))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.commentCount").value(0));
+        assertSpecificFields(getResult, spec.createAssertions());
 
         flushAndClear();
         assertEquals(1L, workRepository.findById(id).orElseThrow().getViewCount());
@@ -186,6 +187,9 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.author").value(curator.getName()))
                 .andExpect(jsonPath("$.type").value(spec.type()));
         assertSpecificFields(updateResult, spec.updateAssertions());
+        flushAndClear();
+        assertSpecificFields(mockMvc.perform(get("/work/" + id))
+                .andExpect(status().isOk()), spec.updateAssertions());
 
         mockMvc.perform(delete("/work/" + id)
                         .header("Authorization", authorization))
@@ -484,8 +488,8 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
                             p.put("rhymeScheme", "ABAB");
                             p.put("poemType", "Free verse");
                         },
-                        Map.of("content", "Poem content"),
-                        Map.of("content", "Updated poem content")
+                        Map.of("content", "Poem content", "rhymeScheme", "AABB", "poemType", "Sonnet"),
+                        Map.of("content", "Updated poem content", "rhymeScheme", "ABAB", "poemType", "Free verse")
                 )),
                 Arguments.of(new WorkEndpointCase(
                         "articles",
