@@ -7,6 +7,7 @@ import org.bibliotecaviva.backend.domain.entities.Comment;
 import org.bibliotecaviva.backend.domain.entities.CommentReply;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.projections.CommentSummary;
+import org.bibliotecaviva.backend.domain.entities.projections.CommentDetails;
 import org.bibliotecaviva.backend.domain.entities.textual.Article;
 import org.bibliotecaviva.backend.domain.enums.Role;
 import org.bibliotecaviva.backend.domain.enums.Status;
@@ -103,13 +104,15 @@ class CommentServiceTest {
         Comment comment = buildComment(UUID.randomUUID(), "Comentario", user, work);
         Pageable pageable = PageRequest.of(0, 10);
         when(workRepository.existsById(workId)).thenReturn(true);
-        when(commentRepository.findByWorkIdOrderByCreatedAtDesc(workId, pageable)).thenReturn(new PageImpl<>(List.of(comment)));
+        when(commentRepository.findByWorkIdOrderByCreatedAtDesc(workId, pageable))
+                .thenReturn(new PageImpl<>(List.of(details(comment, 0L))));
 
         Page<CommentResponseDTO> response = commentService.getByWorkId(workId, pageable);
 
         assertEquals(1, response.getTotalElements());
         assertEquals(comment.getContent(), response.getContent().getFirst().content());
         verify(commentRepository).findByWorkIdOrderByCreatedAtDesc(workId, pageable);
+        verify(commentRepository, never()).getLikeCount(any());
     }
 
     @Test
@@ -297,8 +300,7 @@ class CommentServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
         when(workRepository.existsById(work.getId())).thenReturn(true);
         when(commentRepository.findByWorkIdOrderByCreatedAtDesc(work.getId(), pageable))
-                .thenReturn(new PageImpl<>(List.of(comment)));
-        when(commentRepository.getLikeCount(comment.getId())).thenReturn(2L);
+                .thenReturn(new PageImpl<>(List.of(details(comment, 2L))));
 
         CommentResponseDTO response = commentService.getByWorkId(work.getId(), pageable).getContent().getFirst();
 
@@ -306,6 +308,26 @@ class CommentServiceTest {
         assertEquals(reply.getId(), response.reply().id());
         assertEquals("Answer", response.reply().content());
         assertEquals(author.getName(), response.reply().authorName());
+        assertEquals(2L, response.likes());
+        verify(commentRepository, never()).getLikeCount(any());
+    }
+
+    private static CommentDetails details(Comment comment, long likes) {
+        var values = new java.util.HashMap<String, Object>();
+        values.put("id", comment.getId());
+        values.put("content", comment.getContent());
+        values.put("authorName", comment.getUser().getName());
+        values.put("createdAt", comment.getCreatedAt());
+        values.put("likes", likes);
+        if (comment.getReply() != null) {
+            var reply = comment.getReply();
+            values.put("replyId", reply.getId());
+            values.put("replyContent", reply.getContent());
+            values.put("replyAuthorName", reply.getUser().getName());
+            values.put("replyCreatedAt", reply.getCreatedAt());
+        }
+        return new org.springframework.data.projection.SpelAwareProxyProjectionFactory()
+                .createProjection(CommentDetails.class, values);
     }
 
     private static User buildUser(UUID id, Role role) {

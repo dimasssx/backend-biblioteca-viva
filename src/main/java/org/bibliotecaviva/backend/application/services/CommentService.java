@@ -10,6 +10,7 @@ import org.bibliotecaviva.backend.application.dtos.response.LikeResponseDTO;
 import org.bibliotecaviva.backend.domain.entities.Comment;
 import org.bibliotecaviva.backend.domain.entities.CommentReply;
 import org.bibliotecaviva.backend.domain.entities.projections.CommentSummary;
+import org.bibliotecaviva.backend.domain.entities.projections.CommentDetails;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.exceptions.CommentNotFoundException;
 import org.bibliotecaviva.backend.domain.exceptions.ReplyAlreadyExistsException;
@@ -50,14 +51,16 @@ public class CommentService {
         return toDTO(saved);
     }
 
+    @Transactional(readOnly = true)
     public Page<CommentResponseDTO> getByWorkId(UUID workId, Pageable pageable) {
         if (!workRepository.existsById(workId)) {
             throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         }
         return commentRepository.findByWorkIdOrderByCreatedAtDesc(workId, pageable)
-                .map(this::toDTO);
+                .map(this::toDetailsDTO);
     }
 
+    @Transactional(readOnly = true)
     public Page<CommentSummaryResponseDTO> getAll(Pageable pageable){
         return commentRepository.findAllWithDetails(pageable)
                 .map(this::toSummaryDTO);
@@ -89,6 +92,14 @@ public class CommentService {
             throw new AccessDeniedException("Você não pode deletar este comentário");
         }
         commentRepository.delete(comment);
+    }
+
+    private CommentResponseDTO toDetailsDTO(CommentDetails comment) {
+        var reply = comment.getReplyId() == null ? null : new CommentReplyResponseDTO(
+                comment.getReplyId(), comment.getReplyContent(),
+                comment.getReplyAuthorName(), comment.getReplyCreatedAt());
+        return new CommentResponseDTO(comment.getId(), comment.getContent(),
+                comment.getAuthorName(), comment.getCreatedAt(), comment.getLikes(), reply);
     }
 
     //usar filtrando já por work
@@ -212,4 +223,3 @@ public class CommentService {
         return toReplyDTO(replyRepository.save(reply));
     }
 }
-

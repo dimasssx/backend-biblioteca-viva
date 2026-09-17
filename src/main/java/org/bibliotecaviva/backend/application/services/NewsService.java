@@ -1,6 +1,6 @@
 package org.bibliotecaviva.backend.application.services;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.bibliotecaviva.backend.application.dtos.request.NewsRequestDTO;
 import org.bibliotecaviva.backend.application.dtos.response.NewsResponseDTO;
@@ -38,10 +38,12 @@ public class NewsService {
         return newsMapper.toDto(newsRepository.save(news));
     }
 
+    @Transactional(readOnly = true)
     public Page<NewsResponseDTO> getAll(Pageable pageable) {
         return newsRepository.findAll(pageable).map(newsMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
     public NewsResponseDTO getById(UUID id) {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Notícia não encontrada"));
