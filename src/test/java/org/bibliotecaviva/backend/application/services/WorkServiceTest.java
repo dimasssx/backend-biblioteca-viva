@@ -274,18 +274,35 @@ class WorkServiceTest {
     }
 
     @Test
-    void updateShouldFailWhenAuthorEmailIsBlankAndNoUserMatches() {
+    void updateShouldRejectBlankAuthorBeforeMapping() {
         UUID id = UUID.randomUUID();
         User author = buildUser(UUID.randomUUID(), "autor@teste.com");
         Article work = buildArticle(id, author, "Obra antiga");
         ArticleRequestDTO request = buildArticleRequest("Obra atualizada", " ");
 
         when(workRepository.findById(id)).thenReturn(Optional.of(work));
-        when(userRepository.findByEmail(request.authorEmail())).thenReturn(Optional.empty());
-
-        assertThrows(UserNotFoundException.class, () -> workService.update(id, request));
-        verify(workMapper).partialUpdate(request, work);
+        assertThrows(IllegalArgumentException.class, () -> workService.update(id, request));
+        verify(workMapper, never()).partialUpdate(request, work);
         verify(workRepository, never()).save(any());
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource(value = {
+            "NULL,NULL", "autor@teste.com,Autor externo", "'',NULL", "NULL,'   '"
+    }, nullValues = "NULL")
+    void createAndUpdateShouldShareAuthorshipValidation(String email, String name) {
+        var id = UUID.randomUUID();
+        var author = buildUser(UUID.randomUUID(), "original@teste.com");
+        var work = buildArticle(id, author, "Titulo original");
+        var request = new ArticleRequestDTO("Titulo novo", email, name,
+                LocalDateTime.now().minusDays(1), "Descricao completa", "Conteudo", "Turma A");
+        when(workRepository.findById(id)).thenReturn(Optional.of(work));
+        assertThrows(IllegalArgumentException.class, () -> workService.create(request));
+        assertThrows(IllegalArgumentException.class, () -> workService.update(id, request));
+        org.mockito.Mockito.verifyNoInteractions(workMapper, cloudinaryService, userRepository);
+        verify(workRepository, never()).save(any());
+        assertSame(author, work.getAuthor());
+        assertEquals("Titulo original", work.getTitle());
     }
 
     @Test

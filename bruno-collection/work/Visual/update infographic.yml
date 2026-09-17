@@ -37,6 +37,9 @@ settings:
   maxRedirects: 5
 
 docs: |-
+  A atualização exige exatamente um entre authorEmail e authorName, não vazio.
+  Autoria ausente ou ambígua e ID de outro subtipo retornam 400, antes de alterações ou upload.
+
   # Update Infographic (Infográfico)
 
   Atualiza uma obra visual do tipo Infográfico existente.

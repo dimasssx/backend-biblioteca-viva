@@ -80,7 +80,7 @@ class PasswordResetIntegrationTest extends IntegrationTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").isNotEmpty());
         mockMvc.perform(get("/work/liked").header("Authorization", oldBearer))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized());
 
         mockMvc.perform(post("/auth/password-reset/confirm")
                         .contentType(MediaType.APPLICATION_JSON)

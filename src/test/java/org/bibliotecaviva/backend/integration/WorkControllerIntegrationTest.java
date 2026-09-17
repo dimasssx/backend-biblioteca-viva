@@ -36,6 +36,69 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class WorkControllerIntegrationTest extends IntegrationTestSupport {
 
+    @ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {"missing", "both", "blank"})
+    void updateMustRejectInvalidAuthorshipWithoutChangingWork(String scenario) throws Exception {
+        var curator = createActiveCurator();
+        var article = createArticleInDatabase(curator);
+        var originalTitle = article.getTitle();
+        var payload = baseWorkPayload("Titulo alterado", curator.getEmail());
+        payload.put("content", "Novo conteudo");
+        if (scenario.equals("missing")) payload.remove("authorEmail");
+        if (scenario.equals("both")) payload.put("authorName", "Outro autor");
+        if (scenario.equals("blank")) {
+            payload.remove("authorEmail");
+            payload.put("authorName", "   ");
+        }
+        mockMvc.perform(put("/work/articles/{id}", article.getId())
+                        .header("Authorization", bearer(curator))
+                        .contentType(MediaType.APPLICATION_JSON).content(json(payload)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+        assertEquals(originalTitle, article.getTitle());
+        assertEquals(curator, article.getAuthor());
+        org.mockito.Mockito.verify(cloudinaryService, org.mockito.Mockito.never()).uploadImage(any());
+    }
+
+    @Test
+    void wrongSubtypeMustReturnBadRequestBeforeUpload() throws Exception {
+        var curator = createActiveCurator();
+        var article = createArticleInDatabase(curator);
+        var originalTitle = article.getTitle();
+        var payload = baseWorkPayload("Titulo alterado", curator.getEmail());
+        mockMvc.perform(multipart(HttpMethod.PUT, "/work/arts/" + article.getId())
+                        .file(new MockMultipartFile("data", "", MediaType.APPLICATION_JSON_VALUE, json(payload).getBytes()))
+                        .file(new MockMultipartFile("image", "test.png", "image/png", "image".getBytes()))
+                        .header("Authorization", bearer(curator)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+        assertEquals(originalTitle, article.getTitle());
+        org.mockito.Mockito.verify(cloudinaryService, org.mockito.Mockito.never()).uploadImage(any());
+    }
+
+    @Test
+    void updateMaySwitchBetweenRegisteredAndExternalAuthor() throws Exception {
+        var curator = createActiveCurator();
+        var article = createArticleInDatabase(curator);
+        var payload = baseWorkPayload("Titulo alterado", curator.getEmail());
+        payload.put("content", "Novo conteudo");
+        payload.remove("authorEmail");
+        payload.put("authorName", "Autor externo");
+        mockMvc.perform(put("/work/articles/{id}", article.getId())
+                        .header("Authorization", bearer(curator))
+                        .contentType(MediaType.APPLICATION_JSON).content(json(payload)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.author").value("Autor externo"));
+        assertNull(article.getAuthor());
+        payload.remove("authorName");
+        payload.put("authorEmail", curator.getEmail());
+        mockMvc.perform(put("/work/articles/{id}", article.getId())
+                        .header("Authorization", bearer(curator))
+                        .contentType(MediaType.APPLICATION_JSON).content(json(payload)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.author").value(curator.getName()));
+        assertNull(article.getAuthorName());
+        assertEquals(curator, article.getAuthor());
+    }
+
     @MockitoBean
     private CloudinaryService cloudinaryService;
 

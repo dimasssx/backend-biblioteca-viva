@@ -79,12 +79,7 @@ public class WorkService {
 
     @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto, MultipartFile image) {
-        if (dto.authorEmail() != null && dto.authorName() != null) {
-            throw new IllegalArgumentException("Informe apenas um dos campos: email ou nome");
-        }
-        if (dto.authorEmail() == null && dto.authorName() == null) {
-            throw new IllegalArgumentException("Forneça um usuário cadastrado ou o nome do autor");
-        }
+        validateAuthorship(dto);
 
         Work work = switch (dto) {
             case EssayRequestDTO d -> workMapper.toEntity(d);
@@ -142,18 +137,19 @@ public class WorkService {
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto, MultipartFile image) {
         Work work = workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
+        validateAuthorship(dto);
         switch (dto) {
-            case EssayRequestDTO d -> workMapper.partialUpdate(d, (Essay) work);
-            case ArtRequestDTO d -> workMapper.partialUpdate(d, (Art) work);
-            case CordelRequestDTO d -> workMapper.partialUpdate(d, (Cordel) work);
-            case ShortStoryRequestDTO d -> workMapper.partialUpdate(d, (ShortStory) work);
-            case TaleRequestDTO d -> workMapper.partialUpdate(d, (Tale) work);
-            case ArticleRequestDTO d -> workMapper.partialUpdate(d, (Article) work);
-            case InfographicRequestDTO d -> workMapper.partialUpdate(d, (Infographic) work);
-            case MultimediaRequestDTO d -> workMapper.partialUpdate(d, (Multimedia) work);
-            case LibraLiteratureRequestDTO d -> workMapper.partialUpdate(d, (LibraLiterature) work);
-            case PoemRequestDTO d -> workMapper.partialUpdate(d, (Poem) work);
-            case OtherRequestDTO d -> workMapper.partialUpdate(d, (Other) work);
+            case EssayRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Essay.class));
+            case ArtRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Art.class));
+            case CordelRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Cordel.class));
+            case ShortStoryRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, ShortStory.class));
+            case TaleRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Tale.class));
+            case ArticleRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Article.class));
+            case InfographicRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Infographic.class));
+            case MultimediaRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Multimedia.class));
+            case LibraLiteratureRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, LibraLiterature.class));
+            case PoemRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Poem.class));
+            case OtherRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Other.class));
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         }
@@ -253,7 +249,23 @@ public class WorkService {
         return workRepository.count();
     }
 
-    private boolean hasText(String value) {
+    private static void validateAuthorship(WorkRequest dto) {
+        if (dto.authorEmail() != null && dto.authorName() != null) {
+            throw new IllegalArgumentException("Informe apenas um dos campos: email ou nome");
+        }
+        if (!hasText(dto.authorEmail()) && !hasText(dto.authorName())) {
+            throw new IllegalArgumentException("Forneça um usuário cadastrado ou o nome do autor");
+        }
+    }
+
+    private static <W extends Work> W requireSubtype(Work work, Class<W> type) {
+        if (!type.isInstance(work)) {
+            throw new IllegalArgumentException("Tipo da obra incompatível com a rota solicitada");
+        }
+        return type.cast(work);
+    }
+
+    private static boolean hasText(String value) {
         return value != null && !value.isBlank();
     }
 
