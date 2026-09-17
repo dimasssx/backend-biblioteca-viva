@@ -88,6 +88,10 @@ Adding a type means: a new entity, request and response DTO, one value in
 `WorkController`, a counter in `HomePageDashboardResponseDTO`, and a migration
 extending the `obras_type_check` constraint.
 
+Ao excluir uma obra, seus vínculos de curtidas também são removidos. Quando a
+obra excluída é uma arte usada como ilustração, o cordel é preservado e sua
+ilustração passa a ser nula.
+
 ## Registered Users
 
 | Username  | Password | Email               | Role    |

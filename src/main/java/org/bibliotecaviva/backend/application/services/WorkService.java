@@ -189,6 +189,8 @@ public class WorkService {
     public void delete(UUID id) {
         workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra com id " + id + " não encontrada"));
+        workRepository.deleteLikesByWorkId(id);
+        workRepository.clearIllustrationReferences(id);
         workRepository.deleteById(id);
     }
 

@@ -3,6 +3,7 @@ package org.bibliotecaviva.backend.integration;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bibliotecaviva.backend.application.services.CloudinaryService;
 import org.bibliotecaviva.backend.domain.entities.User;
+import org.bibliotecaviva.backend.domain.entities.textual.Cordel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,6 +22,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -243,6 +245,46 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json(invalid)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void shouldDeleteLikedWorkAndItsLikeLinks() throws Exception {
+        User curator = createActiveCurator();
+        User student = createActiveStudent();
+        var work = createArticleInDatabase(curator, uniqueTitle("Obra curtida"));
+        userRepository.likeWork(student.getId(), work.getId());
+        flushAndClear();
+
+        mockMvc.perform(delete("/work/{id}", work.getId())
+                        .header("Authorization", bearer(curator)))
+                .andExpect(status().isNoContent());
+        flushAndClear();
+
+        assertTrue(workRepository.findById(work.getId()).isEmpty());
+        assertTrue(userRepository.findLikedWorkIdsByUserId(student.getId()).isEmpty());
+    }
+
+    @Test
+    void shouldDetachCordelIllustrationBeforeDeletingArt() throws Exception {
+        User curator = createActiveCurator();
+        String authorization = bearer(curator);
+        String artTitle = uniqueTitle("Arte referenciada");
+        UUID artId = createWorkThroughApi("arts", artPayload(artTitle, curator.getEmail()), authorization);
+        Map<String, Object> cordelPayload = baseWorkPayload(uniqueTitle("Cordel ilustrado"), curator.getEmail());
+        cordelPayload.put("content", "Conteudo do cordel");
+        cordelPayload.put("rhymeScheme", "ABAB");
+        cordelPayload.put("artName", artTitle);
+        UUID cordelId = createWorkThroughApi("cordels", cordelPayload, authorization);
+        flushAndClear();
+
+        mockMvc.perform(delete("/work/{id}", artId)
+                        .header("Authorization", authorization))
+                .andExpect(status().isNoContent());
+        flushAndClear();
+
+        assertTrue(workRepository.findById(artId).isEmpty());
+        Cordel cordel = (Cordel) workRepository.findById(cordelId).orElseThrow();
+        assertNull(cordel.getIllustration());
     }
 
     @Test

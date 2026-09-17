@@ -375,6 +375,8 @@ class WorkServiceTest {
 
         workService.delete(id);
 
+        verify(workRepository).deleteLikesByWorkId(id);
+        verify(workRepository).clearIllustrationReferences(id);
         verify(workRepository).deleteById(id);
     }
 
@@ -385,6 +387,8 @@ class WorkServiceTest {
 
         assertThrows(WorkNotFoundException.class, () -> workService.delete(id));
 
+        verify(workRepository, never()).deleteLikesByWorkId(id);
+        verify(workRepository, never()).clearIllustrationReferences(id);
         verify(workRepository, never()).deleteById(id);
     }
 

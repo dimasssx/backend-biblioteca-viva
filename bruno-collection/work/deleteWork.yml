@@ -5,7 +5,7 @@ info:
 
 http:
   method: DELETE
-  url: "{{api_url}}work/{{id}}"
+  url: "{{api_url}}work/{{work_id}}"
   auth: inherit
 
 runtime:
@@ -18,3 +18,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+  forwardAuthorizationHeader: true
