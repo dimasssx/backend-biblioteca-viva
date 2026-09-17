@@ -8,6 +8,7 @@ import org.bibliotecaviva.backend.application.dtos.response.ReviewSummaryRespons
 import org.bibliotecaviva.backend.domain.entities.BookClubReview;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.enums.Role;
+import org.bibliotecaviva.backend.domain.exceptions.BookClubNotFoundException;
 import org.bibliotecaviva.backend.domain.exceptions.CommentNotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.BookClubRepository;
 import org.bibliotecaviva.backend.persistence.repository.BookClubReviewRepository;
@@ -29,7 +30,7 @@ public class BookClubReviewService {
     public BookClubReviewResponseDTO create(UUID bookClubId, @Valid BookClubReviewRequestDTO dto, User user) {
         var toSave = toEntity(dto);
         toSave.setBookClub(bookClubRepository.findById(bookClubId)
-                .orElseThrow(() -> new RuntimeException("BookClub not found")));
+                .orElseThrow(() -> new BookClubNotFoundException("BookClub not found")));
         toSave.setUser(user);
         return toDTO(reviewRepository.save(toSave));
     }
