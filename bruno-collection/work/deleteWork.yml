@@ -19,3 +19,18 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Delete Work (Remover Obra)
+
+  Remove permanentemente uma obra da biblioteca pelo seu ID.
+
+  ## Permissões
+  - Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Respostas esperadas
+  - `204`: Obra removida com sucesso.
+  - `400`: Formato de ID inválido.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Obra não encontrada.

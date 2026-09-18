@@ -1,0 +1,51 @@
+info:
+  name: update tale
+  type: http
+  seq: 13
+
+http:
+  method: PUT
+  url: "{{api_url}}work/tales/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "A Sombra da Figueira Velha (Revisão)",
+        "authorEmail": "aluno1@teste.com",
+        "publicationDate": "2026-03-30T11:00:00",
+        "description": "Narrativa de mistério sobre lendas urbanas que cercam uma antiga árvore no pátio escolar.",
+        "content": "Diziam os mais velhos que a figueira guardava os segredos de todas as cartas de amor jamais entregues. Quando o vento soprava do sul, suas folhas farfalhavam nomes que os vivos já haviam esquecido. Os estudantes evitavam sentar sob sua copa nas tardes nubladas, temendo que seus próprios pensamentos fossem sussurrados pelos galhos.",
+        "genre": "Mistério / Fantasia Urbana",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Tale (Narrativa / Conto)
+
+  Atualiza uma obra do tipo Narrativa (`Tale`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - Campo `genre` é obrigatório (3 a 100 caracteres).
+  - Campos obrigatórios: `title`, `description`, `content`, `genre`, `studentClass`, `publicationDate`.
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `Tale`.
+
+  ## Respostas esperadas
+  - `200`: Narrativa atualizada com sucesso.
+  - `400`: Dados inválidos, autoria ambígua ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

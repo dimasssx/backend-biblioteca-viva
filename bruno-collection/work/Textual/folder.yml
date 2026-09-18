@@ -5,3 +5,23 @@ info:
 
 request:
   auth: inherit
+
+docs:
+  content: |-
+    # Obras Textuais
+
+    Operações de criação e atualização de obras textuais da biblioteca viva.
+
+    ## Subtipos Suportados
+    - **Cordel (`Cordel`)**: `POST /work/cordels` e `PUT /work/cordels/{id}`. Suporta vinculação opcional a arte (`illustration`).
+    - **Artigo (`Article`)**: `POST /work/articles` e `PUT /work/articles/{id}`.
+    - **Redação (`Essay`)**: `POST /work/essays` e `PUT /work/essays/{id}`. Inclui `rate`, `theme` e `feedback`.
+    - **Conto Curto (`ShortStory`)**: `POST /work/short-stories` e `PUT /work/short-stories/{id}`.
+    - **Narrativa (`Tale`)**: `POST /work/tales` e `PUT /work/tales/{id}`. Inclui `genre`.
+    - **Poema (`Poem`)**: `POST /work/poems` e `PUT /work/poems/{id}`. Inclui `rhymeScheme` e `poemType`.
+    - **Outro (`Other`)**: `POST /work/others` e `PUT /work/others/{id}` (multipart-form com imagem opcional).
+
+    ## Permissões
+    - Criação e atualização exigem perfil `ADMIN` ou `CURADOR`.
+    - Todas as rotas de atualização exigem validação estrita de autoria (`authorEmail` xor `authorName`).
+  type: text/markdown

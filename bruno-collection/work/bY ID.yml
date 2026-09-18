@@ -22,3 +22,17 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Get Work by ID
+
+  Retorna os detalhes completos de uma obra a partir de seu UUID, incrementando atomicamente o contador de visualizações (`viewCount`).
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+  - Salva o `id` da obra retornada na variável global `work_id`.
+
+  ## Respostas esperadas
+  - `200`: Detalhes da obra de acordo com seu subtipo polimórfico.
+  - `400`: Formato de UUID inválido.
+  - `404`: Obra não encontrada.

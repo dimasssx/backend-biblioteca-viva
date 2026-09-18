@@ -1,5 +1,7 @@
 package org.bibliotecaviva.backend.api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -104,6 +106,9 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(description = "Retorna métricas consolidadas do sistema para o painel administrativo")
+    @ApiResponse(responseCode = "200", description = "Métricas recuperadas com sucesso")
+    @ApiResponse(responseCode = "403", description = "Acesso negado", content = @Content)
     public ResponseEntity<AdminDashboardResponseDTO> getDashboardData() {
         return ResponseEntity.ok(new AdminDashboardResponseDTO(
                 workService.countWorks(),

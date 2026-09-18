@@ -13,3 +13,18 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Reject User (Rejeitar Usuário)
+
+  Rejeita o cadastro de um usuário pendente, alterando seu status para `REJECTED`.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `204`: Usuário rejeitado com sucesso.
+  - `400`: ID inválido ou status do usuário não é pendente.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Usuário não encontrado.

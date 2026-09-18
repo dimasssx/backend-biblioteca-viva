@@ -18,3 +18,16 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get Book Club by ID (Buscar Clube do Livro por ID)
+
+  Retorna os detalhes de um encontro específico do Clube do Livro pelo seu identificador UUID.
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+
+  ## Respostas esperadas
+  - `200`: Detalhes do encontro do clube do livro.
+  - `400`: Formato de UUID inválido.
+  - `404`: Clube do livro não encontrado.

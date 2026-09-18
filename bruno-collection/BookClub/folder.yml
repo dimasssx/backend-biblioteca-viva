@@ -5,3 +5,25 @@ info:
 
 request:
   auth: inherit
+
+docs:
+  content: |-
+    # Book Club (Clube do Livro)
+
+    Endpoints de gerenciamento do Clube do Livro da Biblioteca Viva.
+
+    ## Rotas Públicas
+    - `GET /bookclub`: lista paginada de todos os clubes do livro agendados.
+    - `GET /bookclub/next`: retorna o próximo clube do livro a ocorrer.
+    - `GET /bookclub/{id}`: obtém detalhes de um clube por ID.
+    - `GET /bookclub/{id}/participants`: lista os participantes inscritos no clube.
+
+    ## Rotas Autenticadas (Qualquer Usuário Logado)
+    - `POST /bookclub/{id}/subscribe`: inscreve o usuário logado no clube.
+    - `POST /bookclub/{id}/unsubscribe`: cancela a inscrição do usuário logado no clube.
+
+    ## Rotas Administrativas (`ADMIN` ou `CURADOR`)
+    - `POST /bookclub`: cria uma nova edição do clube do livro.
+    - `PUT /bookclub/{id}`: atualiza dados da edição do clube do livro.
+    - `DELETE /bookclub/{id}`: cancela/remove a edição do clube do livro.
+  type: text/markdown

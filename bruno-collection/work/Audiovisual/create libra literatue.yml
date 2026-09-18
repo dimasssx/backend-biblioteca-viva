@@ -25,3 +25,20 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Create Libra Literature
+
+  Cria uma obra de Literatura em Libras (`LibraLiterature`). Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - `url` deve ser uma URL válida apontando para o arquivo/vídeo.
+  - `duration` deve estar no formato ISO 8601 (ex.: `PT2M30S`).
+
+  ## Respostas esperadas
+  - `201`: Literatura em Libras criada com sucesso.
+  - `400`: Dados inválidos ou formato de duração inválido.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `409`: Já existe obra com mesmo autor e título.

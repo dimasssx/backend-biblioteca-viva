@@ -19,3 +19,18 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Delete Book Club (Remover Clube do Livro)
+
+  Remove um encontro do Clube do Livro.
+
+  ## Permissões
+  - Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Respostas esperadas
+  - `204`: Clube do livro removido com sucesso.
+  - `400`: Formato de ID inválido.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Clube do livro não encontrado.

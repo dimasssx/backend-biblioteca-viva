@@ -18,3 +18,17 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Unsubscribe from Book Club (Cancelar Inscrição no Clube do Livro)
+
+  Cancela a inscrição do usuário autenticado no encontro do Clube do Livro.
+
+  ## Autenticação
+  - Requer usuário autenticado (qualquer perfil).
+
+  ## Respostas esperadas
+  - `200`: Inscrição cancelada com sucesso.
+  - `400`: Formato de ID inválido.
+  - `401`: Não autenticado.
+  - `404`: Clube do livro não encontrado ou usuário não estava inscrito.

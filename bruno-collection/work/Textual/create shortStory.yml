@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "title": "O Sussurro das Páginas Esquecidas",
-       "authorEmail": "aluno1@teste.com", 
+        "authorEmail": "aluno1@teste.com", 
         "publicationDate": "2026-03-30T16:45:00",
         "description": "Um conto fantástico sobre uma biblioteca onde os livros ganham voz quando as luzes se apagam.",
         "content": "Era meia-noite quando o primeiro estalo ecoou pelo corredor de carvalho. Não era o prédio assentando, mas o 'Dom Quixote' bocejando na prateleira C-12. Naquela biblioteca, as histórias não aceitavam o silêncio do papel. As palavras de Clarice Lispector flutuavam como névoa entre as estantes, misturando-se aos versos de Drummond. O vigia, um senhor de passos macios, fingia não ouvir. Ele sabia que, enquanto houvesse alguém para imaginar, as páginas jamais estariam realmente quietas. O segredo da imortalidade, ele descobriu, não estava na tinta, mas no fôlego de quem ousava ler o invisível.",
@@ -24,3 +24,19 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Create Short Story (Conto Curto)
+
+  Cria uma obra do tipo Conto Curto (`ShortStory`). Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - Campos obrigatórios: `title`, `description`, `content`, `studentClass`, `publicationDate`.
+
+  ## Respostas esperadas
+  - `201`: Conto curto criado com sucesso.
+  - `400`: Dados inválidos.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `409`: Já existe obra com mesmo autor e título.

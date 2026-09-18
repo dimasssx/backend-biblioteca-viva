@@ -13,3 +13,15 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get Next Book Club (Próximo Clube do Livro)
+
+  Retorna o próximo encontro agendado do Clube do Livro (o mais próximo a partir da data atual).
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+
+  ## Respostas esperadas
+  - `200`: Encontro do clube do livro encontrado.
+  - `404`: Nenhum clube do livro futuro agendado.

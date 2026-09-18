@@ -20,3 +20,22 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get Users (Listar Usuários - Painel Admin)
+
+  Lista usuários de forma paginada no painel administrativo, com suporte a filtro por status.
+
+  ## Parâmetros
+  - `status` (opcional): `ACTIVE`, `PENDING`, `BLOCKED`, `REJECTED`.
+  - `page` (opcional): número da página (0-indexed).
+  - `size` (opcional): tamanho da página (padrão 10).
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `200`: Página contendo a lista de usuários.
+  - `400`: Valor de status inválido.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.

@@ -1,0 +1,51 @@
+info:
+  name: update cordel
+  type: http
+  seq: 9
+
+http:
+  method: PUT
+  url: "{{api_url}}work/cordels/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Malle e o Sofrimento (Segunda Edição)",
+        "authorEmail": "aluno2@teste.com",
+        "publicationDate": "2024-06-28T00:00:00.000000",
+        "description": "Edição revisada do cordel sobre conversas com a divindade.",
+        "content": "Se eu conversasse com Deus\nIria lhe perguntar\nPor que e que sofremos tanto\nQuando viemos pra ca?\n\nEle entao me olharia\nCom carinho e compaixao\nE diria que na vida\nAprender e a missao.",
+        "rhymeScheme": "ABAABB",
+        "artName": "Ilustração: Jardim da Escola",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Cordel
+
+  Atualiza uma obra do tipo Cordel (`Cordel`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Ilustração
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - `artName` é opcional. Se enviado, vincula o cordel à ilustração existente com esse título (`illustration`). Se for `null` ou omitido, a ilustração vinculada é limpa.
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `Cordel`.
+
+  ## Respostas esperadas
+  - `200`: Cordel atualizado com sucesso.
+  - `400`: Dados inválidos, autoria ambígua ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra, autor ou arte (`artName`) não encontrada.
+  - `409`: Já existe outra obra com o mesmo autor e título.

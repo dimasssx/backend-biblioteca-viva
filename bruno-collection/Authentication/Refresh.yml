@@ -1,0 +1,56 @@
+info:
+  name: Refresh
+  type: http
+  seq: 9
+
+http:
+  method: POST
+  url: "{{api_url}}auth/refresh"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body) {
+          const token = res.body.accessToken;
+          if (token) {
+            bru.setGlobalEnvVar("access_token", token);
+          }
+        }
+
+        const rawCookie = res.getHeader('set-cookie');
+
+        if (rawCookie) {
+          let cookieHeaderValue = '';
+
+          if (Array.isArray(rawCookie)) {
+            cookieHeaderValue = rawCookie.map(c => c.split(';')[0]).join('; ');
+          } else {
+            cookieHeaderValue = rawCookie.split(';')[0];
+          }
+
+          bru.setGlobalEnvVar("session_cookie", cookieHeaderValue);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: true
+
+docs: |-
+  # Refresh Token
+
+  Renova o `accessToken` de curta duração utilizando o `refreshToken` enviado via cookie HttpOnly (`refresh_token`).
+
+  ## Funcionamento
+  - O cookie `refresh_token` é enviado automaticamente pelo cabeçalho `Cookie: {{session_cookie}}` herdado da coleção.
+  - Se válido, o endpoint rotaciona o refresh token no banco de dados, emite um novo cookie HttpOnly e retorna um novo `accessToken` no corpo.
+  - O script pós-resposta atualiza automaticamente as variáveis globais `access_token` e `session_cookie`.
+
+  ## Respostas esperadas
+  - `200`: Token renovado com sucesso. Retorna novo `accessToken` e define novo cookie `refresh_token`.
+  - `401`: Refresh token ausente, expirado, inválido ou revogado.
+  - `429`: Limite de requisições de refresh excedido (rate limit).

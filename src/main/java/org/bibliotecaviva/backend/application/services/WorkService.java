@@ -272,19 +272,16 @@ public class WorkService {
     // pode dar gargalo fazer update toda hora assim
     @Transactional
     public LikeResponseDTO like(UUID workId, User user) {
-        workRepository.findById(workId)
-                .orElseThrow(() -> new WorkNotFoundException("Obra com id " + workId + " não encontrada"));
+
+        if (!workRepository.existsById(workId)) throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         var userId = user.getId();
-
         userRepository.likeWork(userId, workId);
-
         return new LikeResponseDTO(true, workRepository.getLikeCount(workId));
     }
 
     @Transactional
     public LikeResponseDTO unLike(UUID workId, User user) {
-        workRepository.findById(workId)
-                .orElseThrow(() -> new WorkNotFoundException("Obra com id " + workId + " não encontrada"));
+        if (!workRepository.existsById(workId)) throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         var userId = user.getId();
 
         userRepository.unlikeWork(userId, workId);

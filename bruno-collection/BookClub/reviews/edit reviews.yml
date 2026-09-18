@@ -27,3 +27,18 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Edit Book Club Review (Editar Avaliação do Clube do Livro)
+
+  Atualiza o comentário e nota de uma avaliação feita pelo próprio usuário.
+
+  ## Autenticação
+  - Requer usuário autenticado (deve ser o autor da avaliação).
+
+  ## Respostas esperadas
+  - `200`: Avaliação atualizada com sucesso.
+  - `400`: Dados inválidos.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado (usuário não é o autor da avaliação).
+  - `404`: Avaliação ou clube do livro não encontrado.

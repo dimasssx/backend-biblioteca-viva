@@ -25,3 +25,21 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Create Book Club Review (Criar Avaliação do Clube do Livro)
+
+  Cria uma avaliação com nota e comentário sobre um encontro do Clube do Livro.
+
+  ## Autenticação
+  - Requer usuário autenticado.
+
+  ## Campos
+  - `content`: Texto do comentário/avaliação.
+  - `rating`: Nota de 1 a 5.
+
+  ## Respostas esperadas
+  - `201`: Avaliação criada com sucesso.
+  - `400`: Dados inválidos ou nota fora do intervalo.
+  - `401`: Não autenticado.
+  - `404`: Clube do livro não encontrado.

@@ -13,3 +13,15 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Liked Works (Obras Curtidas)
+
+  Retorna uma lista contendo os UUIDs de todas as obras curtidas pelo usuário atualmente autenticado.
+
+  ## Autenticação
+  - Requer usuário autenticado (`ALUNO`, `CURADOR` ou `ADMIN`).
+
+  ## Respostas esperadas
+  - `200`: Lista de UUIDs das obras curtidas pelo usuário.
+  - `401`: Não autenticado.

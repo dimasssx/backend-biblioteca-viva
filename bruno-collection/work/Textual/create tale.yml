@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "title": "A Serpente de Prata e o Rio de Mel",
-       "authorName": "Maria", 
+        "authorName": "Maria", 
         "publicationDate": "2026-03-30T17:00:00",
         "description": "Uma fábula regionalista sobre a ganância e a preservação dos recursos naturais.",
         "content": "Dizem os antigos que, no coração da mata, corria um rio cujas águas tinham o dulçor do mel silvestre. Uma serpente de escamas prateadas guardava a nascente, permitindo que cada animal bebesse apenas o necessário para saciar a sede. Certo dia, um caçador de fora tentou engarrafar o rio inteiro para vender na cidade. A serpente, em vez de atacá-lo, transformou o mel em água salgada. O homem chorou de sede, e suas lágrimas, ao caírem na terra, fizeram brotar espinhos. Desde então, o rio voltou a ser doce, mas apenas para quem chega de mãos vazias e coração limpo.",
@@ -25,3 +25,20 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Create Tale (Narrativa / Conto)
+
+  Cria uma obra do tipo Narrativa (`Tale`). Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - Campo `genre` é obrigatório (3 a 100 caracteres).
+  - Campos obrigatórios: `title`, `description`, `content`, `genre`, `studentClass`, `publicationDate`.
+
+  ## Respostas esperadas
+  - `201`: Narrativa criada com sucesso.
+  - `400`: Dados inválidos.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `409`: Já existe obra com mesmo autor e título.

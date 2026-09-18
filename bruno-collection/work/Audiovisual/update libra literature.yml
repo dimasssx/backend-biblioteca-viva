@@ -1,0 +1,51 @@
+info:
+  name: update libra literature
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: "{{api_url}}work/libra-literatures/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Vidas Secas - Interpretação Completa em Libras (Edição Revista)",
+        "authorEmail": "aluno1@teste.com",
+        "publicationDate": "2026-03-30T09:00:00",
+        "description": "Edição revisada da adaptação da obra clássica de Graciliano Ramos para a Língua Brasileira de Sinais.",
+        "url": "https://cdn.bibliotecaviva.org/acessibilidade/libras/vidas-secas-v2.mp4",
+        "duration": "PT2M45S",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Libra Literature (Literatura em Libras)
+
+  Atualiza uma obra do tipo Literatura em Libras (`LibraLiterature`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - `url` deve ser uma URL válida.
+  - `duration` deve estar no formato ISO 8601 (ex.: `PT2M45S`, `PT10M`).
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `LibraLiterature`.
+
+  ## Respostas esperadas
+  - `200`: Obra atualizada com sucesso.
+  - `400`: Dados inválidos, formato de duração inválido ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

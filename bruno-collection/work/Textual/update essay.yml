@@ -1,0 +1,54 @@
+info:
+  name: update essay
+  type: http
+  seq: 11
+
+http:
+  method: PUT
+  url: "{{api_url}}work/essays/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "A Inteligência Artificial e os Limites da Criatividade Humana (Revisada)",
+        "authorEmail": "aluno1@teste.com",
+        "publicationDate": "2026-03-30T10:00:00",
+        "description": "Redação dissertativa-argumentativa nota máxima com correções e feedback atualizado.",
+        "content": "A crescente integração entre inteligência artificial e processos criativos levanta debates profundos acerca da originalidade artística. No contexto escolar, o desafio reside em orientar os estudantes para que as ferramentas tecnológicas funcionem como catalisadores cognitivos e não como substitutos do pensamento crítico.",
+        "rate": 960,
+        "theme": "Tecnologia e Sociedade",
+        "themeDescription": "Discussão sobre os impactos éticos e educacionais da automação na criatividade contemporânea.",
+        "feedback": "Excelente articulação de argumentos e proposta de intervenção detalhada.",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Essay (Redação)
+
+  Atualiza uma obra do tipo Redação (`Essay`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - `rate` deve ser um valor inteiro entre 0 e 1000.
+  - Campos obrigatórios: `title`, `description`, `content`, `rate`, `theme`, `themeDescription`, `feedback`, `studentClass`, `publicationDate`.
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `Essay`.
+
+  ## Respostas esperadas
+  - `200`: Redação atualizada com sucesso.
+  - `400`: Dados inválidos, nota fora do intervalo [0, 1000] ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

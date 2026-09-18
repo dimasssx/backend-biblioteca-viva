@@ -20,3 +20,17 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Delete Book Club Review (Remover Avaliação do Clube do Livro)
+
+  Remove uma avaliação de encontro do Clube do Livro.
+
+  ## Permissões
+  - O próprio autor da avaliação ou usuário com perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `204`: Avaliação removida com sucesso.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado (não é o autor nem admin).
+  - `404`: Avaliação não encontrada.

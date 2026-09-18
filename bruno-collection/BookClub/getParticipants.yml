@@ -19,3 +19,16 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Get Book Club Participants (Participantes do Clube do Livro)
+
+  Lista todos os usuários inscritos no encontro do Clube do Livro especificado.
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+
+  ## Respostas esperadas
+  - `200`: Lista de participantes inscritos.
+  - `400`: Formato de ID inválido.
+  - `404`: Clube do livro não encontrado.

@@ -57,7 +57,7 @@ class WorkServiceLikeTest {
         User user = buildUser(userId);
         Article work = buildArticle(workId, user);
 
-        when(workRepository.findById(workId)).thenReturn(Optional.of(work));
+        when(workRepository.existsById(workId)).thenReturn(true);
         when(workRepository.getLikeCount(workId)).thenReturn(1L);
 
         LikeResponseDTO response = workService.like(workId, user);
@@ -72,9 +72,8 @@ class WorkServiceLikeTest {
         UUID workId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
         User user = buildUser(userId);
-        Article work = buildArticle(workId, user);
 
-        when(workRepository.findById(workId)).thenReturn(Optional.of(work));
+        when(workRepository.existsById(workId)).thenReturn(true);
         when(workRepository.getLikeCount(workId)).thenReturn(0L);
 
         LikeResponseDTO response = workService.unLike(workId, user);
@@ -89,7 +88,7 @@ class WorkServiceLikeTest {
         UUID workId = UUID.randomUUID();
         User user = buildUser(UUID.randomUUID());
 
-        when(workRepository.findById(workId)).thenReturn(Optional.empty());
+        when(workRepository.existsById(workId)).thenReturn(false);
 
         assertThrows(WorkNotFoundException.class, () -> workService.like(workId, user));
         verify(userRepository, never()).likeWork(user.getId(), workId);
@@ -100,7 +99,7 @@ class WorkServiceLikeTest {
         UUID workId = UUID.randomUUID();
         User user = buildUser(UUID.randomUUID());
 
-        when(workRepository.findById(workId)).thenReturn(Optional.empty());
+        when(workRepository.existsById(workId)).thenReturn(false);
 
         assertThrows(WorkNotFoundException.class, () -> workService.unLike(workId, user));
         verify(userRepository, never()).unlikeWork(user.getId(), workId);

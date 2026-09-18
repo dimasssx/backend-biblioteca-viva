@@ -13,3 +13,18 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Block User (Bloquear Usuário)
+
+  Bloqueia um usuário, alterando seu status para `BLOCKED`. Usuários bloqueados não conseguem autenticar na plataforma.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `204`: Usuário bloqueado com sucesso.
+  - `400`: ID inválido ou usuário já bloqueado.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Usuário não encontrado.

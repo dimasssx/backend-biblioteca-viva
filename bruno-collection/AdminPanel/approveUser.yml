@@ -13,3 +13,18 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Approve User (Aprovar Usuário)
+
+  Aprova um usuário pendente, alterando seu status para `ACTIVE`.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `204`: Usuário ativado com sucesso.
+  - `400`: ID inválido ou usuário já ativo.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Usuário não encontrado.

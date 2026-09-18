@@ -5,3 +5,22 @@ info:
 
 request:
   auth: inherit
+
+docs:
+  content: |-
+    # Obras Audiovisuais
+
+    Operações de criação e atualização de obras audiovisuais da biblioteca viva.
+
+    ## Subtipos
+    - **Multimídia (`Multimedia`)**:
+      - `POST /work/multimedias`: cria uma produção multimídia.
+      - `PUT /work/multimedias/{id}`: atualiza uma produção multimídia existente.
+    - **Literatura em Libras (`LibraLiterature`)**:
+      - `POST /work/libra-literatures`: cria uma interpretação literária em Língua Brasileira de Sinais.
+      - `PUT /work/libra-literatures/{id}`: atualiza uma obra em Libras existente.
+
+    ## Permissões
+    - Criação e atualização exigem perfil `ADMIN` ou `CURADOR`.
+    - Leituras e consultas são públicas através dos endpoints de `/work`.
+  type: text/markdown

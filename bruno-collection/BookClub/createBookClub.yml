@@ -25,3 +25,25 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Create Book Club (Criar Clube do Livro)
+
+  Cria um novo encontro do Clube do Livro.
+
+  ## Permissões
+  - Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Campos
+  - `bookName`: Título do livro em debate.
+  - `bookSynopses`: Sinopse ou descrição do livro.
+  - `bookAuthor`: Autor da obra.
+  - `date`: Data e hora do encontro (formato ISO 8601).
+  - `location`: Local físico ou link do encontro.
+  - `bookCoverUrl`: URL da capa do livro.
+
+  ## Respostas esperadas
+  - `201`: Clube do livro criado com sucesso.
+  - `400`: Dados inválidos no corpo da requisição.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado (usuário não é admin ou curador).

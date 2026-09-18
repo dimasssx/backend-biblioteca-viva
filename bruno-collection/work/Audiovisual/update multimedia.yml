@@ -1,0 +1,51 @@
+info:
+  name: update multimedia
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: "{{api_url}}work/multimedias/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Documentário: Rotina do Porto (Versão Remasterizada)",
+        "authorName": "joaozinho123",
+        "publicationDate": "2025-03-30T14:00:00",
+        "description": "Edição remasterizada do registro audiovisual sobre os trabalhadores do porto histórico.",
+        "url": "https://cdn.bibliotecaviva.org/videos/documentarios/vozes-do-cais-1080p.mp4",
+        "duration": "PT3M15S",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Multimedia
+
+  Atualiza uma obra do tipo Multimídia (`Multimedia`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - `url` deve ser uma URL válida.
+  - `duration` deve estar no formato ISO 8601 (ex.: `PT2M30S`, `PT5M`, `PT45S`).
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `Multimedia`.
+
+  ## Respostas esperadas
+  - `200`: Multimídia atualizada com sucesso.
+  - `400`: Dados inválidos, formato de duração inválido ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

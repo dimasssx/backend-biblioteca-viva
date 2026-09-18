@@ -19,3 +19,18 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Subscribe to Book Club (Inscrever-se no Clube do Livro)
+
+  Inscreve o usuário autenticado no encontro do Clube do Livro.
+
+  ## Autenticação
+  - Requer usuário autenticado (qualquer perfil).
+
+  ## Respostas esperadas
+  - `200`: Inscrição realizada com sucesso.
+  - `400`: Formato de ID inválido.
+  - `401`: Não autenticado.
+  - `404`: Clube do livro não encontrado.
+  - `409`: Usuário já está inscrito neste clube.

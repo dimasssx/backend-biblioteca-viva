@@ -6,6 +6,12 @@ info:
 http:
   method: POST
   url: "{{api_url}}admin/users/import"
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value: ""
   auth: inherit
 
 settings:

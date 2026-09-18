@@ -1,0 +1,49 @@
+info:
+  name: update shortStory
+  type: http
+  seq: 12
+
+http:
+  method: PUT
+  url: "{{api_url}}work/short-stories/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "O Relógio da Praça Central (Versão Final)",
+        "authorEmail": "aluno1@teste.com",
+        "publicationDate": "2026-03-30T10:30:00",
+        "description": "Conto curto sobre encontros fortuitos e o valor da passagem do tempo em uma pequena cidade.",
+        "content": "O ponteiro emperrava exatamente às cinco para as seis. Era nesse intervalo de silêncio mecânico que dona Clara sempre atravessava a rua com seu embrulho de pães quentes. Ninguém na cidade percebia a hesitação dos segundos, exceto o velho sapateiro da esquina, que sincronizava seus últimos pontos com a respiração cansada da torre.",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Short Story (Conto Curto)
+
+  Atualiza uma obra do tipo Conto Curto (`ShortStory`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` ou `authorName`.
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `ShortStory`.
+  - Campos obrigatórios: `title`, `description`, `content`, `studentClass`, `publicationDate`.
+
+  ## Respostas esperadas
+  - `200`: Conto curto atualizado com sucesso.
+  - `400`: Dados inválidos, autoria ambígua ou ID de outro subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

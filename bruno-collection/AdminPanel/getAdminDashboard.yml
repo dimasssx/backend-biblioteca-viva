@@ -13,3 +13,21 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get Admin Dashboard (Métricas do Painel Admin)
+
+  Retorna métricas gerais do sistema para a visão do administrador:
+  - Total de obras cadastradas.
+  - Total de comentários.
+  - Total de avaliações de clubes do livro.
+  - Total de usuários.
+  - Total de usuários pendentes de aprovação.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `200`: Métricas consolidadas do dashboard.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.

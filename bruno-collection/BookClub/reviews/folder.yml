@@ -5,3 +5,16 @@ info:
 
 request:
   auth: inherit
+
+docs:
+  content: |-
+    # Book Club Reviews (Avaliações do Clube do Livro)
+
+    Endpoints para gerenciar comentários e avaliações dos participantes sobre os encontros do Clube do Livro.
+
+    ## Rotas
+    - `GET /bookclub/{bookClubId}/reviews`: lista paginada de avaliações do clube (público).
+    - `POST /bookclub/{bookClubId}/reviews`: cria uma avaliação (requer usuário autenticado).
+    - `PUT /bookclub/{bookClubId}/reviews/{commentId}`: atualiza a avaliação criada pelo próprio usuário.
+    - `DELETE /bookclub/{bookClubId}/reviews/{commentId}`: remove a avaliação criada pelo próprio usuário ou por admin.
+  type: text/markdown

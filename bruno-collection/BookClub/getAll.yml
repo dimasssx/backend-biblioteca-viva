@@ -13,3 +13,15 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get All Book Clubs (Listar Clubes do Livro)
+
+  Retorna a lista paginada de todos os encontros do Clube do Livro, ordenados por data decrescente.
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+  - Parâmetros opcionais de paginação: `page` (padrão 0), `size` (padrão 10), `sort`.
+
+  ## Respostas esperadas
+  - `200`: Página contendo a lista de clubes do livro.

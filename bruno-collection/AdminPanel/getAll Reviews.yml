@@ -13,3 +13,16 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get All Reviews (Listar Todas as Avaliações)
+
+  Retorna uma listagem paginada de todas as avaliações de clubes de leitura cadastradas na plataforma, ordenadas pela data de criação decrescente.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `200`: Página contendo o resumo das avaliações.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.

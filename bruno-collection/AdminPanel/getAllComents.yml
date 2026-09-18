@@ -13,3 +13,16 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get All Comments (Listar Todos os Comentários)
+
+  Retorna uma listagem paginada de todos os comentários feitos em obras da biblioteca, ordenados por data decrescente.
+
+  ## Permissões
+  - Requer perfil `ADMIN`.
+
+  ## Respostas esperadas
+  - `200`: Página contendo o resumo dos comentários.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.

@@ -10,12 +10,11 @@ http:
     type: json
     data: |-
       {
-
         "bookName": "dom quixote",
         "bookSynopses": "blablabla descricao muito boa",
-        "bookAuthor": "nao lembro",
+        "bookAuthor": "Miguel de Cervantes",
         "date": "2026-05-13T19:30:00",
-        "location": "Bibliotecao",
+        "location": "Biblioteca Central",
         "bookCoverUrl":"https://www.lpm.com.br/livros/Imagens/dom_quixote_hq_9788525433633_g.jpg"
       }
   auth: inherit
@@ -31,3 +30,18 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: true
+
+docs: |-
+  # Update Book Club (Atualizar Clube do Livro)
+
+  Atualiza os dados de um encontro do Clube do Livro.
+
+  ## Permissões
+  - Requer perfil `ADMIN` ou `CURADOR`.
+
+  ## Respostas esperadas
+  - `200`: Clube do livro atualizado com sucesso.
+  - `400`: Dados inválidos ou ID inválido.
+  - `401`: Não autenticado.
+  - `403`: Acesso negado.
+  - `404`: Clube do livro não encontrado.

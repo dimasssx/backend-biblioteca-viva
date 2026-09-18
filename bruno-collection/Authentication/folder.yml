@@ -10,14 +10,21 @@ docs:
   content: |-
     # Authentication
 
-    ## Public
-    - `POST /auth/login`: autentica usuario ativo e retorna JWT.
-    - `POST /auth/register/aluno`: cadastra usuario `ALUNO` com status `PENDING`.
-    - `POST /auth/logout`: invalida o JWT atual.
+    ## Público
+    - `POST /auth/login`: autentica usuário ativo, retorna JWT no corpo e define cookie HttpOnly `refresh_token`.
+    - `POST /auth/refresh`: renova o `accessToken` utilizando o cookie HttpOnly `refresh_token`.
+    - `POST /auth/register/aluno`: cadastra usuário `ALUNO` com status `PENDING`.
+    - `POST /auth/logout`: revoga o refresh token no banco e limpa o cookie.
+    - `POST /auth/password-reset/request`: solicita código de redefinição de senha para conta ativa.
+    - `POST /auth/password-reset/verify`: valida o código de 6 dígitos e emite token temporário.
+    - `POST /auth/password-reset/confirm`: redefine a senha usando o token temporário.
+
+    ## Autenticado
+    - `GET /auth/me`: retorna dados cadastrais do usuário autenticado no momento.
 
     ## Admin
-    - `POST /auth/register/curador`: cadastra usuario `CURADOR` com status `ACTIVE`.
-    - `POST /auth/register/admin`: cadastra usuario `ADMIN` com status `ACTIVE`.
+    - `POST /auth/register/curador`: cadastra usuário `CURADOR` com status `ACTIVE`.
+    - `POST /auth/register/admin`: cadastra usuário `ADMIN` com status `ACTIVE`.
 
-    Os cadastros de `CURADOR` e `ADMIN` exigem token Bearer de usuario `ADMIN`.
+    Os cadastros de `CURADOR` e `ADMIN` exigem token Bearer de usuário com perfil `ADMIN`.
   type: text/markdown

@@ -1,0 +1,51 @@
+info:
+  name: update poem
+  type: http
+  seq: 14
+
+http:
+  method: PUT
+  url: "{{api_url}}work/poems/{{id}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "O Guardião do Cristal Verde (Revisado)",
+        "authorEmail": "aluno1@teste.com",
+        "publicationDate": "2026-05-01T12:45:00",
+        "description": "Versão revisada do poema sobre a preservação florestal e equilíbrio ecológico.",
+        "content": "A mata respira em verde profundo,\nOnde o bicho esconde o rastro do pé,\nProtegem as águas com braços de fé,\nLonge do ruído e do mal do mundo.\n\nChegou o progresso com ferro e trator,\nRasgando o silêncio da terra sagrada,\nDeixando a semente no chão sufocada,\nTrocando a vida por ouro e valor.\n\nMas veio o trovão em voz de aviso,\nQue a terra cansada não pode aguentar,\nO rio que seca parou de cantar,\nPerdendo a beleza do seu paraíso.\n\nSó resta o cuidado na palma da mão,\nPlantando o futuro pra não ver o fim,\nZelando a floresta no nosso jardim,\nPra que o amanhã não seja em vão.",
+        "rhymeScheme": "ABBA",
+        "poemType": "Lírico-Narrativo",
+        "studentClass": "Terceiro B"
+      }
+  auth: inherit
+
+runtime:
+  variables:
+    - name: id
+      value: 18856a5b-47e4-40fa-be5a-1aba33cf0941
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  # Update Poem
+
+  Atualiza uma obra do tipo Poema (`Poem`). Requer usuário autenticado com perfil `ADMIN` ou `CURADOR`.
+
+  ## Regras de Autoria e Validação
+  - Exige exatamente um identificador de autoria: `authorEmail` (para usuário cadastrado) ou `authorName` (autor externo). Enviar ambos ou nenhum resulta em `400`.
+  - O `id` informado na rota deve pertencer a uma obra do subtipo `Poem`; se pertencer a outro subtipo, retorna `400`.
+  - Campos obrigatórios: `title`, `description`, `content`, `rhymeScheme`, `poemType`, `studentClass`, `publicationDate`.
+
+  ## Respostas esperadas
+  - `200`: Poema atualizado com sucesso.
+  - `400`: Dados inválidos, autoria ambígua/ausente ou ID incompatível com subtipo.
+  - `401`: Token ausente ou inválido.
+  - `403`: Usuário sem perfil `ADMIN` ou `CURADOR`.
+  - `404`: Obra ou autor não encontrado.
+  - `409`: Já existe outra obra com o mesmo autor e título.

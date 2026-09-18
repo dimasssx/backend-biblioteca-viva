@@ -18,3 +18,15 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |-
+  # Get Book Club Reviews (Listar Avaliações do Clube)
+
+  Retorna a lista paginada de avaliações de um clube do livro, ordenadas pela mais recente.
+
+  ## Acesso
+  - Rota pública. Não exige autenticação.
+
+  ## Respostas esperadas
+  - `200`: Página contendo a lista de avaliações.
+  - `404`: Clube do livro não encontrado.
