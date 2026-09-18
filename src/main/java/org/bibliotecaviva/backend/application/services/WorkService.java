@@ -74,11 +74,15 @@ public class WorkService {
 
     @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto) {
-        return create(dto, null);
+        return createInternal(dto, null);
     }
 
     @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto, MultipartFile image) {
+        return createInternal(dto, image);
+    }
+
+    private <T extends WorkRequest> WorkResponse createInternal(T dto, MultipartFile image) {
         validateAuthorship(dto);
 
         Work work = switch (dto) {
@@ -148,11 +152,15 @@ public class WorkService {
 
     @Transactional
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto) {
-        return update(id, dto, null);
+        return updateInternal(id, dto, null);
     }
 
     @Transactional
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto, MultipartFile image) {
+        return updateInternal(id, dto, image);
+    }
+
+    private <T extends WorkRequest> WorkResponse updateInternal(UUID id, T dto, MultipartFile image) {
         Work work = workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
         validateAuthorship(dto);

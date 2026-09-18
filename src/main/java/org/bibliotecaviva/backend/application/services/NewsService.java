@@ -93,7 +93,7 @@ public class NewsService {
             }
         }
 
-        return newsMapper.toDto(newsRepository.save(news));
+        return newsMapper.toDto(news);
     }
 
     @Transactional
