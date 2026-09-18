@@ -2,13 +2,13 @@ package org.bibliotecaviva.backend.application.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Uploader;
+import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Map;
@@ -36,11 +36,12 @@ class CloudinaryServiceTest {
 
         when(cloudinary.uploader()).thenReturn(uploader);
         when(uploader.upload(any(byte[].class), any(Map.class)))
-                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.jpg"));
+                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.jpg", "public_id", "test/image"));
 
-        String result = cloudinaryService.uploadImage(file);
+        CloudinaryUploadResult result = cloudinaryService.uploadImage(file);
 
-        assertEquals("https://res.cloudinary.com/test/image.jpg", result);
+        assertEquals("https://res.cloudinary.com/test/image.jpg", result.url());
+        assertEquals("test/image", result.publicId());
         verify(uploader).upload(any(byte[].class), any(Map.class));
     }
 
@@ -51,11 +52,11 @@ class CloudinaryServiceTest {
 
         when(cloudinary.uploader()).thenReturn(uploader);
         when(uploader.upload(any(byte[].class), any(Map.class)))
-                .thenReturn(Map.of("url", "http://res.cloudinary.com/test/image.png"));
+                .thenReturn(Map.of("url", "http://res.cloudinary.com/test/image.png", "public_id", "test/image_png"));
 
-        String result = cloudinaryService.uploadImage(file);
+        CloudinaryUploadResult result = cloudinaryService.uploadImage(file);
 
-        assertEquals("http://res.cloudinary.com/test/image.png", result);
+        assertEquals("http://res.cloudinary.com/test/image.png", result.url());
     }
 
     @Test
@@ -98,9 +99,9 @@ class CloudinaryServiceTest {
 
         when(cloudinary.uploader()).thenReturn(uploader);
         when(uploader.upload(any(byte[].class), any(Map.class)))
-                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.jpeg"));
+                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.jpeg", "public_id", "test/image_jpeg"));
 
-        String result = cloudinaryService.uploadImage(file);
+        CloudinaryUploadResult result = cloudinaryService.uploadImage(file);
 
         assertNotNull(result);
     }
@@ -129,9 +130,9 @@ class CloudinaryServiceTest {
 
         when(cloudinary.uploader()).thenReturn(uploader);
         when(uploader.upload(any(byte[].class), any(Map.class)))
-                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.png"));
+                .thenReturn(Map.of("secure_url", "https://res.cloudinary.com/test/image.png", "public_id", "test/image_null_ct"));
 
-        String result = cloudinaryService.uploadImage(file);
+        CloudinaryUploadResult result = cloudinaryService.uploadImage(file);
 
         assertNotNull(result);
     }

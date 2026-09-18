@@ -28,6 +28,9 @@ public class News {
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
+    @Column(name = "cloudinary_public_id")
+    private String cloudinaryPublicId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
     private User author;

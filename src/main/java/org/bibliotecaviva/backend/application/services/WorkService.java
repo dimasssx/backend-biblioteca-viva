@@ -82,38 +82,26 @@ public class WorkService {
         validateAuthorship(dto);
 
         Work work = switch (dto) {
-            case EssayRequestDTO d -> workMapper.toEntity(d);
-            case ArtRequestDTO d -> workMapper.toEntity(d);
-            case CordelRequestDTO d -> workMapper.toEntity(d);
-            case ShortStoryRequestDTO d -> workMapper.toEntity(d);
-            case TaleRequestDTO d -> workMapper.toEntity(d);
-            case ArticleRequestDTO d -> workMapper.toEntity(d);
-            case InfographicRequestDTO d -> workMapper.toEntity(d);
-            case MultimediaRequestDTO d -> workMapper.toEntity(d);
+            case EssayRequestDTO d          -> workMapper.toEntity(d);
+            case ArtRequestDTO d            -> workMapper.toEntity(d);
+            case CordelRequestDTO d         -> workMapper.toEntity(d);
+            case ShortStoryRequestDTO d     -> workMapper.toEntity(d);
+            case TaleRequestDTO d           -> workMapper.toEntity(d);
+            case ArticleRequestDTO d        -> workMapper.toEntity(d);
+            case InfographicRequestDTO d    -> workMapper.toEntity(d);
+            case MultimediaRequestDTO d     -> workMapper.toEntity(d);
             case LibraLiteratureRequestDTO d -> workMapper.toEntity(d);
-            case PoemRequestDTO d -> workMapper.toEntity(d);
-            case OtherRequestDTO d -> workMapper.toEntity(d);
+            case PoemRequestDTO d           -> workMapper.toEntity(d);
+            case OtherRequestDTO d          -> workMapper.toEntity(d);
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         };
 
-        // Upload de imagem para obras visuais
-        if (work instanceof VisualWork visualWork && image != null && !image.isEmpty()) {
-            visualWork.setUrl(cloudinaryService.uploadImage(image));
-        }
-
-        // Upload de imagem para a categoria "outros" (opcional)
-        if (work instanceof Other other && image != null && !image.isEmpty()) {
-            other.setImageUrl(cloudinaryService.uploadImage(image));
-        }
-
-        if (work instanceof Cordel && hasText(((CordelRequestDTO) dto).artName())) {
-            ((Cordel) work).setIllustration(findArtByTitle(((CordelRequestDTO) dto).artName()));
-        }
-
+        // ── 1. Validate author/title BEFORE touching Cloudinary ──────────────
         if (dto.authorEmail() != null && dto.authorName() == null) {
             var user = userRepository.findByEmail(dto.authorEmail())
-                    .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.authorEmail()));
+                    .orElseThrow(() -> new UserNotFoundException(
+                            "Usuário não encontrado com email: " + dto.authorEmail()));
             if (workRepository.existsWorkByAuthorAndTitle(user, work.getTitle())) {
                 throw new WorkAlreadyExistsException("Obra com mesmo título já existe para este autor");
             }
@@ -124,8 +112,38 @@ public class WorkService {
             }
             work.setAuthorName(dto.authorName());
         }
-        work.setViewCount(0L);
-        return workMapper.toDTO(workRepository.save(work), 0L, 0L);
+
+        if (work instanceof Cordel && hasText(((CordelRequestDTO) dto).artName())) {
+            ((Cordel) work).setIllustration(findArtByTitle(((CordelRequestDTO) dto).artName()));
+        }
+
+        // ── 2. Upload AFTER validation — compensate if persistence fails ──────
+        String uploadedPublicId = null;
+        try {
+            if (work instanceof VisualWork visualWork && image != null && !image.isEmpty()) {
+                var uploaded = cloudinaryService.uploadImage(image);
+                visualWork.setUrl(uploaded.url());
+                visualWork.setCloudinaryPublicId(uploaded.publicId());
+                uploadedPublicId = uploaded.publicId();
+            }
+            if (work instanceof Other other && image != null && !image.isEmpty()) {
+                var uploaded = cloudinaryService.uploadImage(image);
+                other.setImageUrl(uploaded.url());
+                other.setCloudinaryPublicId(uploaded.publicId());
+                uploadedPublicId = uploaded.publicId();
+            }
+
+            work.setViewCount(0L);
+            return workMapper.toDTO(workRepository.save(work), 0L, 0L);
+
+        } catch (RuntimeException ex) {
+            // If DB persistence failed after a successful upload, clean up the orphan
+            if (uploadedPublicId != null) {
+                log.warn("Persistence failed after Cloudinary upload — deleting orphan asset: {}", uploadedPublicId);
+                cloudinaryService.deleteImage(uploadedPublicId);
+            }
+            throw ex;
+        }
     }
 
     @Transactional
@@ -139,34 +157,25 @@ public class WorkService {
                 .orElseThrow(() -> new WorkNotFoundException("Obra não encontrada"));
         validateAuthorship(dto);
         switch (dto) {
-            case EssayRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Essay.class));
-            case ArtRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Art.class));
-            case CordelRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Cordel.class));
-            case ShortStoryRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, ShortStory.class));
-            case TaleRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Tale.class));
-            case ArticleRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Article.class));
-            case InfographicRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Infographic.class));
-            case MultimediaRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Multimedia.class));
+            case EssayRequestDTO d           -> workMapper.partialUpdate(d, requireSubtype(work, Essay.class));
+            case ArtRequestDTO d             -> workMapper.partialUpdate(d, requireSubtype(work, Art.class));
+            case CordelRequestDTO d          -> workMapper.partialUpdate(d, requireSubtype(work, Cordel.class));
+            case ShortStoryRequestDTO d      -> workMapper.partialUpdate(d, requireSubtype(work, ShortStory.class));
+            case TaleRequestDTO d            -> workMapper.partialUpdate(d, requireSubtype(work, Tale.class));
+            case ArticleRequestDTO d         -> workMapper.partialUpdate(d, requireSubtype(work, Article.class));
+            case InfographicRequestDTO d     -> workMapper.partialUpdate(d, requireSubtype(work, Infographic.class));
+            case MultimediaRequestDTO d      -> workMapper.partialUpdate(d, requireSubtype(work, Multimedia.class));
             case LibraLiteratureRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, LibraLiterature.class));
-            case PoemRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Poem.class));
-            case OtherRequestDTO d -> workMapper.partialUpdate(d, requireSubtype(work, Other.class));
+            case PoemRequestDTO d            -> workMapper.partialUpdate(d, requireSubtype(work, Poem.class));
+            case OtherRequestDTO d           -> workMapper.partialUpdate(d, requireSubtype(work, Other.class));
             default -> throw new IllegalArgumentException(
                     "Tipo não mapeado: " + dto.getClass().getSimpleName());
         }
 
-        // Upload de nova imagem em update para obras visuais
-        if (work instanceof VisualWork visualWork && image != null && !image.isEmpty()) {
-            visualWork.setUrl(cloudinaryService.uploadImage(image));
-        }
-
-        // Upload de imagem para a categoria "outros" (opcional)
-        if (work instanceof Other other && image != null && !image.isEmpty()) {
-            other.setImageUrl(cloudinaryService.uploadImage(image));
-        }
-
         if (dto.authorEmail() != null && dto.authorName() == null) {
             var user = userRepository.findByEmail(dto.authorEmail())
-                    .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado com email: " + dto.authorEmail()));
+                    .orElseThrow(() -> new UserNotFoundException(
+                            "Usuário não encontrado com email: " + dto.authorEmail()));
             work.setAuthor(user);
             work.setAuthorName(null);
         } else {
@@ -177,17 +186,73 @@ public class WorkService {
         if (work instanceof Cordel && hasText(((CordelRequestDTO) dto).artName())) {
             ((Cordel) work).setIllustration(findArtByTitle(((CordelRequestDTO) dto).artName()));
         }
+
+        // ── Replace image: capture old publicId, upload new, delete old on success ──
+        if (image != null && !image.isEmpty()) {
+            if (work instanceof VisualWork visualWork) {
+                String oldPublicId = visualWork.getCloudinaryPublicId();
+                String newPublicId = null;
+                try {
+                    var uploaded = cloudinaryService.uploadImage(image);
+                    visualWork.setUrl(uploaded.url());
+                    visualWork.setCloudinaryPublicId(uploaded.publicId());
+                    newPublicId = uploaded.publicId();
+                    var saved = workRepository.save(work);
+                    cloudinaryService.deleteImage(oldPublicId);  // best-effort cleanup of old asset
+                    return workMapper.toDTO(saved, workRepository.getLikeCount(id),
+                            commentRepository.countByWork_Id(id));
+                } catch (RuntimeException ex) {
+                    if (newPublicId != null) {
+                        log.warn("Update persistence failed — deleting orphan asset: {}", newPublicId);
+                        cloudinaryService.deleteImage(newPublicId);
+                    }
+                    throw ex;
+                }
+            } else if (work instanceof Other other) {
+                String oldPublicId = other.getCloudinaryPublicId();
+                String newPublicId = null;
+                try {
+                    var uploaded = cloudinaryService.uploadImage(image);
+                    other.setImageUrl(uploaded.url());
+                    other.setCloudinaryPublicId(uploaded.publicId());
+                    newPublicId = uploaded.publicId();
+                    var saved = workRepository.save(work);
+                    cloudinaryService.deleteImage(oldPublicId);
+                    return workMapper.toDTO(saved, workRepository.getLikeCount(id),
+                            commentRepository.countByWork_Id(id));
+                } catch (RuntimeException ex) {
+                    if (newPublicId != null) {
+                        log.warn("Update persistence failed — deleting orphan asset: {}", newPublicId);
+                        cloudinaryService.deleteImage(newPublicId);
+                    }
+                    throw ex;
+                }
+            }
+        }
+
         return workMapper.toDTO(workRepository.save(work), workRepository.getLikeCount(id),
                 commentRepository.countByWork_Id(id));
     }
 
     @Transactional
     public void delete(UUID id) {
-        workRepository.findById(id)
+        Work work = workRepository.findById(id)
                 .orElseThrow(() -> new WorkNotFoundException("Obra com id " + id + " não encontrada"));
+
+        // Capture publicId before deleting the DB record
+        String publicId = null;
+        if (work instanceof VisualWork vw) {
+            publicId = vw.getCloudinaryPublicId();
+        } else if (work instanceof Other other) {
+            publicId = other.getCloudinaryPublicId();
+        }
+
         workRepository.deleteLikesByWorkId(id);
         workRepository.clearIllustrationReferences(id);
         workRepository.deleteById(id);
+
+        // Best-effort remote cleanup — runs after the DB transaction commits
+        cloudinaryService.deleteImage(publicId);
     }
 
     public List<UUID> getLikedWorkIds(User user) {

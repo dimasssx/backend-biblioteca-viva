@@ -19,6 +19,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewsService {
@@ -31,11 +34,23 @@ public class NewsService {
     public NewsResponseDTO create(NewsRequestDTO dto, MultipartFile image, User author) {
         News news = newsMapper.toEntity(dto, author);
 
-        if (image != null && !image.isEmpty()) {
-            news.setImageUrl(cloudinaryService.uploadImage(image));
-        }
+        String uploadedPublicId = null;
+        try {
+            if (image != null && !image.isEmpty()) {
+                var uploaded = cloudinaryService.uploadImage(image);
+                news.setImageUrl(uploaded.url());
+                news.setCloudinaryPublicId(uploaded.publicId());
+                uploadedPublicId = uploaded.publicId();
+            }
 
-        return newsMapper.toDto(newsRepository.save(news));
+            return newsMapper.toDto(newsRepository.save(news));
+        } catch (RuntimeException ex) {
+            if (uploadedPublicId != null) {
+                log.warn("Persistence failed after Cloudinary upload — deleting orphan news asset: {}", uploadedPublicId);
+                cloudinaryService.deleteImage(uploadedPublicId);
+            }
+            throw ex;
+        }
     }
 
     @Transactional(readOnly = true)
@@ -59,10 +74,26 @@ public class NewsService {
         news.setUpdatedAt(LocalDateTime.now());
 
         if (image != null && !image.isEmpty()) {
-            news.setImageUrl(cloudinaryService.uploadImage(image));
+            String oldPublicId = news.getCloudinaryPublicId();
+            String newPublicId = null;
+            try {
+                var uploaded = cloudinaryService.uploadImage(image);
+                news.setImageUrl(uploaded.url());
+                news.setCloudinaryPublicId(uploaded.publicId());
+                newPublicId = uploaded.publicId();
+                var saved = newsRepository.save(news);
+                cloudinaryService.deleteImage(oldPublicId);
+                return newsMapper.toDto(saved);
+            } catch (RuntimeException ex) {
+                if (newPublicId != null) {
+                    log.warn("Update persistence failed — deleting orphan news asset: {}", newPublicId);
+                    cloudinaryService.deleteImage(newPublicId);
+                }
+                throw ex;
+            }
         }
 
-        return newsMapper.toDto(news);
+        return newsMapper.toDto(newsRepository.save(news));
     }
 
     @Transactional
@@ -70,7 +101,9 @@ public class NewsService {
         News news = newsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Notícia não encontrada"));
         verifyOwnership(user, news);
+        String publicId = news.getCloudinaryPublicId();
         newsRepository.delete(news);
+        cloudinaryService.deleteImage(publicId);
     }
 
     private void verifyOwnership(User user, News news) {

@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -30,7 +31,7 @@ class NewsControllerIntegrationTest extends IntegrationTestSupport {
     @BeforeEach
     void setupCloudinary() {
         when(cloudinaryService.uploadImage(any()))
-                .thenReturn("https://res.cloudinary.com/test/news.jpg");
+                .thenReturn(new CloudinaryUploadResult("https://res.cloudinary.com/test/news.jpg", "test-news-id"));
     }
 
     // ────────────────────────── create ──────────────────────────────

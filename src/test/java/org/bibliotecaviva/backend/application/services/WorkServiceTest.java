@@ -23,6 +23,7 @@ import org.bibliotecaviva.backend.domain.exceptions.WorkNotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.CommentRepository;
 import org.bibliotecaviva.backend.persistence.repository.UserRepository;
 import org.bibliotecaviva.backend.persistence.repository.WorkRepository;
+import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -215,7 +216,7 @@ class WorkServiceTest {
 
         when(userRepository.findByEmail(request.authorEmail())).thenReturn(Optional.of(author));
         when(workMapper.toEntity(request)).thenReturn(mapped);
-        when(cloudinaryService.uploadImage(image)).thenReturn("https://res.cloudinary.com/test/image.png");
+        when(cloudinaryService.uploadImage(image)).thenReturn(new CloudinaryUploadResult("https://res.cloudinary.com/test/image.png", "test-public-id"));
         when(workRepository.save(mapped)).thenReturn(saved);
         when(workMapper.toDTO(saved, 0L, 0L)).thenReturn(expected);
 
@@ -238,7 +239,7 @@ class WorkServiceTest {
 
         when(workRepository.findById(id)).thenReturn(Optional.of(existing));
         when(userRepository.findByEmail(author.getEmail())).thenReturn(Optional.of(author));
-        when(cloudinaryService.uploadImage(image)).thenReturn("https://res.cloudinary.com/new/image.png");
+        when(cloudinaryService.uploadImage(image)).thenReturn(new CloudinaryUploadResult("https://res.cloudinary.com/new/image.png", "new-public-id"));
         when(workRepository.save(existing)).thenReturn(existing);
         when(workRepository.getLikeCount(id)).thenReturn(0L);
         when(commentRepository.countByWork_Id(id)).thenReturn(0L);
@@ -470,7 +471,7 @@ class WorkServiceTest {
 
         when(userRepository.findByEmail(request.authorEmail())).thenReturn(Optional.of(author));
         when(workMapper.toEntity(request)).thenReturn(mapped);
-        when(cloudinaryService.uploadImage(image)).thenReturn("https://res.cloudinary.com/test/capa.png");
+        when(cloudinaryService.uploadImage(image)).thenReturn(new CloudinaryUploadResult("https://res.cloudinary.com/test/capa.png", "other-public-id"));
         when(workRepository.save(mapped)).thenReturn(saved);
         when(workMapper.toDTO(saved, 0L, 0L)).thenReturn(expected);
 

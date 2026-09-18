@@ -1,6 +1,7 @@
 package org.bibliotecaviva.backend.integration;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import org.bibliotecaviva.backend.application.services.CloudinaryService;
 import org.bibliotecaviva.backend.domain.entities.User;
 import org.bibliotecaviva.backend.domain.entities.textual.Cordel;
@@ -104,7 +105,8 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
 
     @BeforeEach
     void setupCloudinary() {
-        when(cloudinaryService.uploadImage(any())).thenReturn("https://res.cloudinary.com/test/image.png");
+        when(cloudinaryService.uploadImage(any()))
+                .thenReturn(new CloudinaryUploadResult("https://res.cloudinary.com/test/image.png", "test-img-id"));
     }
 
     @ParameterizedTest(name = "{0}")

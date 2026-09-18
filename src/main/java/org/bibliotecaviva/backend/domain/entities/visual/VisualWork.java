@@ -18,4 +18,9 @@ import org.bibliotecaviva.backend.domain.entities.Work;
 public abstract class VisualWork extends Work {
     @Column(columnDefinition = "TEXT")
     private String url;
+
+    /** Cloudinary {@code public_id} — persisted to enable asset deletion on replace/delete. */
+    @Column(name = "cloudinary_public_id")
+    private String cloudinaryPublicId;
 }
+

@@ -10,6 +10,7 @@ import org.bibliotecaviva.backend.domain.enums.Status;
 import org.bibliotecaviva.backend.domain.exceptions.ForbiddenException;
 import org.bibliotecaviva.backend.domain.exceptions.NotFoundException;
 import org.bibliotecaviva.backend.persistence.repository.NewsRepository;
+import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -77,7 +78,7 @@ class NewsServiceTest {
         NewsResponseDTO expected = buildResponse(mapped);
 
         when(newsMapper.toEntity(dto, author)).thenReturn(mapped);
-        when(cloudinaryService.uploadImage(image)).thenReturn(cloudinaryUrl);
+        when(cloudinaryService.uploadImage(image)).thenReturn(new CloudinaryUploadResult(cloudinaryUrl, "test/foto"));
         when(newsRepository.save(mapped)).thenReturn(mapped);
         when(newsMapper.toDto(mapped)).thenReturn(expected);
 
@@ -232,13 +233,15 @@ class NewsServiceTest {
         NewsResponseDTO expected = buildResponse(news);
 
         when(newsRepository.findById(id)).thenReturn(Optional.of(news));
-        when(cloudinaryService.uploadImage(image)).thenReturn(newUrl);
+        when(cloudinaryService.uploadImage(image)).thenReturn(new CloudinaryUploadResult(newUrl, "test/nova"));
+        when(newsRepository.save(news)).thenReturn(news);
         when(newsMapper.toDto(news)).thenReturn(expected);
 
         newsService.update(id, dto, image, author);
 
         assertEquals(newUrl, news.getImageUrl());
         verify(cloudinaryService).uploadImage(image);
+        verify(newsRepository).save(news);
     }
 
     // ──────────────────────────── delete ────────────────────────────
