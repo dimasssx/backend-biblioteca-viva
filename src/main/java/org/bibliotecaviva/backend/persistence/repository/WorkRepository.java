@@ -76,8 +76,8 @@ public interface WorkRepository extends JpaRepository<Work, UUID> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Work w SET w.viewCount = w.viewCount + 1 WHERE w.id = :id")
-    void incrementViewCount(@Param("id") UUID id);
+    @Query(value = "UPDATE obras SET view_count = view_count + :delta WHERE id = :id", nativeQuery = true)
+    int incrementViewCount(@Param("id") UUID id, @Param("delta") long delta);
 
     @Query(value = "SELECT COUNT(*) FROM likes WHERE work_id = :workId", nativeQuery = true)
     long getLikeCount(@Param("workId") UUID workId);

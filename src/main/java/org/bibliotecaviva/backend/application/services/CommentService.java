@@ -26,10 +26,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.bibliotecaviva.backend.domain.enums.Role;
 import org.springframework.security.access.AccessDeniedException;
 import java.util.UUID;
+import org.springframework.context.ApplicationEventPublisher;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+
+    private final ApplicationEventPublisher events;
 
     private final CommentRepository commentRepository;
     private final WorkRepository workRepository;
@@ -48,6 +51,7 @@ public class CommentService {
                 .build();
 
         Comment saved = commentRepository.save(comment);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
         return toDTO(saved);
     }
 
@@ -92,6 +96,7 @@ public class CommentService {
             throw new AccessDeniedException("Você não pode deletar este comentário");
         }
         commentRepository.delete(comment);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
     }
 
     private CommentResponseDTO toDetailsDTO(CommentDetails comment) {

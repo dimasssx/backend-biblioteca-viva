@@ -14,6 +14,7 @@ import org.bibliotecaviva.backend.persistence.repository.WorkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.context.ApplicationEventPublisher;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
@@ -45,6 +46,9 @@ class WorkServiceUploadOrphanTest {
     @Mock UserRepository userRepository;
     @Mock CommentRepository commentRepository;
     @Mock CloudinaryService cloudinaryService;
+
+    @Mock
+    private ApplicationEventPublisher events;
 
     @InjectMocks
     WorkService workService;

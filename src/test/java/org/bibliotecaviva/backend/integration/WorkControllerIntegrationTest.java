@@ -37,6 +37,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class WorkControllerIntegrationTest extends IntegrationTestSupport {
 
+    @org.springframework.beans.factory.annotation.Autowired
+    private org.bibliotecaviva.backend.application.services.WorkViewService views;
+
+    @org.springframework.test.context.transaction.AfterTransaction
+    void flushViewsAfterFixtureRollback() {
+        // The fixtures no longer exist; clear their pending deltas before the context shuts down.
+        views.flush();
+    }
+
+
     @ParameterizedTest
     @org.junit.jupiter.params.provider.ValueSource(strings = {"missing", "both", "blank"})
     void updateMustRejectInvalidAuthorshipWithoutChangingWork(String scenario) throws Exception {
@@ -152,10 +162,12 @@ class WorkControllerIntegrationTest extends IntegrationTestSupport {
                 .andExpect(jsonPath("$.type").value(spec.type()))
                 .andExpect(jsonPath("$.likeCount").value(0))
                 .andExpect(jsonPath("$.commentCount").value(0));
+        getResult.andExpect(jsonPath("$.viewCount").value(1));
         assertSpecificFields(getResult, spec.createAssertions());
 
         flushAndClear();
-        assertEquals(1L, workRepository.findById(id).orElseThrow().getViewCount());
+        // Views are persisted by the periodic flush, not by the GET.
+        assertEquals(0L, workRepository.findById(id).orElseThrow().getViewCount());
 
         mockMvc.perform(get("/work")
                         .queryParam("type", spec.queryType()))

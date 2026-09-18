@@ -32,6 +32,7 @@ public abstract class Work {
     private LocalDateTime publicationDate;
     @Column(columnDefinition = "TEXT")
     private String description;
+    @Column(updatable = false)
     private Long viewCount = 0L;
     private String studentClass;
 

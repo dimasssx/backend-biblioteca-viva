@@ -33,17 +33,14 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Modifying
     @Query(value = """
-            INSERT INTO likes (user_id, work_id)
-            SELECT :userId, :workId
-            WHERE NOT EXISTS (
-                SELECT 1 FROM likes WHERE user_id = :userId AND work_id = :workId
-            )
+            INSERT INTO likes (user_id, work_id) VALUES (:userId, :workId)
+            ON CONFLICT DO NOTHING
             """, nativeQuery = true)
-    void likeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
+    int likeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
 
     @Modifying
     @Query(value = "DELETE FROM likes WHERE user_id = :userId AND work_id = :workId", nativeQuery = true)
-    void unlikeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
+    int unlikeWork(@Param("userId") UUID userId, @Param("workId") UUID workId);
 
     @Modifying
     @Query(value = "DELETE FROM likes WHERE user_id = :userId", nativeQuery = true)

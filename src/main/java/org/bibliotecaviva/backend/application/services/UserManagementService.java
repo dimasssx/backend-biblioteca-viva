@@ -25,10 +25,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.context.ApplicationEventPublisher;
 
 @Service
 @RequiredArgsConstructor
 public class UserManagementService {
+
+    private final ApplicationEventPublisher events;
 
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
@@ -98,6 +101,7 @@ public class UserManagementService {
         newsRepository.clearAuthorByUserId(id);
 
         userRepository.delete(user);
+        events.publishEvent(WorkCacheInvalidation.all());
     }
 
     //trocar por dto

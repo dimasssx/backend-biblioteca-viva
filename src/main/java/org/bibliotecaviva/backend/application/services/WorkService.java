@@ -1,6 +1,9 @@
 package org.bibliotecaviva.backend.application.services;
 
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
+import static org.bibliotecaviva.backend.api.config.WorkCacheConfig.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.bibliotecaviva.backend.application.dtos.request.WorkRequest;
@@ -50,6 +53,9 @@ public class WorkService {
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final CloudinaryService cloudinaryService;
+    private final WorkViewService workViewService;
+    private final WorkLikeCountService workLikeCountService;
+    private final ApplicationEventPublisher events;
 
     /**
      * Puxa direto da tabela works usando uma interface com atributos genericos
@@ -61,25 +67,24 @@ public class WorkService {
                 .map(workMapper::toWorkSummary);
     }
 
-    // todo: - verificar view count, batch update com cache se necessário
-    // - da pra melhorar a performace pq ta fazendo o join com todas as tabelas
-    // desnecessariamente
     public WorkResponse getById(UUID id) {
-        var work = workRepository.findById(id)
-                .orElseThrow(() -> new WorkNotFoundException("Obra com id " + id + " não encontrada"));
-        workRepository.incrementViewCount(id);
-
-        return workMapper.toDTO(work, workRepository.getLikeCount(id), commentRepository.countByWork_Id(id));
+        var viewed = workViewService.recordView(id);
+        return workMapper.toDTO(viewed.work(), workLikeCountService.getCount(id),
+                commentRepository.countByWork_Id(id), viewed.viewCount());
     }
 
     @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto) {
-        return createInternal(dto, null);
+        var response = createInternal(dto, null);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
+        return response;
     }
 
     @Transactional
     public <T extends WorkRequest> WorkResponse create(T dto, MultipartFile image) {
-        return createInternal(dto, image);
+        var response = createInternal(dto, image);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
+        return response;
     }
 
     private <T extends WorkRequest> WorkResponse createInternal(T dto, MultipartFile image) {
@@ -152,12 +157,16 @@ public class WorkService {
 
     @Transactional
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto) {
-        return updateInternal(id, dto, null);
+        var response = updateInternal(id, dto, null);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
+        return response;
     }
 
     @Transactional
     public <T extends WorkRequest> WorkResponse update(UUID id, T dto, MultipartFile image) {
-        return updateInternal(id, dto, image);
+        var response = updateInternal(id, dto, image);
+        events.publishEvent(WorkCacheInvalidation.dashboard());
+        return response;
     }
 
     private <T extends WorkRequest> WorkResponse updateInternal(UUID id, T dto, MultipartFile image) {
@@ -258,6 +267,7 @@ public class WorkService {
         workRepository.deleteLikesByWorkId(id);
         workRepository.clearIllustrationReferences(id);
         workRepository.deleteById(id);
+        events.publishEvent(WorkCacheInvalidation.work(id));
 
         // Best-effort remote cleanup — runs after the DB transaction commits
         cloudinaryService.deleteImage(publicId);
@@ -267,15 +277,14 @@ public class WorkService {
         return userRepository.findLikedWorkIdsByUserId(user.getId());
     }
 
-    // TODO: fazer sistema melhor de like ou colocar um limitador de request ou
-    // cachear ( mesmo problema das views)
-    // pode dar gargalo fazer update toda hora assim
     @Transactional
     public LikeResponseDTO like(UUID workId, User user) {
 
         if (!workRepository.existsById(workId)) throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         var userId = user.getId();
-        userRepository.likeWork(userId, workId);
+        if (userRepository.likeWork(userId, workId) > 0) {
+            events.publishEvent(WorkCacheInvalidation.work(workId));
+        }
         return new LikeResponseDTO(true, workRepository.getLikeCount(workId));
     }
 
@@ -284,11 +293,15 @@ public class WorkService {
         if (!workRepository.existsById(workId)) throw new WorkNotFoundException("Obra com id " + workId + " não encontrada");
         var userId = user.getId();
 
-        userRepository.unlikeWork(userId, workId);
+        if (userRepository.unlikeWork(userId, workId) > 0) {
+            events.publishEvent(WorkCacheInvalidation.work(workId));
+        }
 
         return new LikeResponseDTO(false, workRepository.getLikeCount(workId));
     }
 
+    @Cacheable(cacheNames = FRONT_PAGE, key = "'" + DASHBOARD_KEY + "'", sync = true,
+            condition = OUTSIDE_TRANSACTION)
     public HomePageDashboardResponseDTO getFrontPageData() {
         var counts = workRepository.countPerType().stream()
                 .collect(java.util.stream.Collectors.toMap(

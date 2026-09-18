@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
+import org.springframework.context.ApplicationEventPublisher;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,9 @@ class CommentServiceTest {
 
     @Mock
     private WorkRepository workRepository;
+
+    @Mock
+    private ApplicationEventPublisher events;
 
     @InjectMocks
     private CommentService commentService;

@@ -13,6 +13,7 @@ import org.bibliotecaviva.backend.persistence.repository.WorkRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.context.ApplicationEventPublisher;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -46,6 +47,9 @@ class WorkServiceLikeTest {
 
     @Mock
     private CloudinaryService cloudinaryService;
+
+    @Mock
+    private ApplicationEventPublisher events;
 
     @InjectMocks
     private WorkService workService;

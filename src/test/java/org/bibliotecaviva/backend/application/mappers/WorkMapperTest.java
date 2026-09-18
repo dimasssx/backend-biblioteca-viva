@@ -97,6 +97,18 @@ class WorkMapperTest {
         assertEquals("Conteudo geral", response.content());
     }
 
+    @Test
+    void counterOverridePreservesEntityAndResponseFields() {
+        var work = other();
+        var response = mapper.toDTO(work, 6L, 2L, 42L);
+        assertEquals(42L, response.viewCount());
+        assertEquals(3L, work.getViewCount());
+        assertEquals(work.getId(), response.id());
+        assertEquals(6L, response.likeCount());
+        assertEquals(2L, response.commentCount());
+        assertEquals("Conteudo geral", ((OtherResponseDTO) response).content());
+    }
+
     private static Other other() {
         return Other.builder().id(UUID.randomUUID()).title("Obra geral").authorName("Curador")
                 .publicationDate(LocalDateTime.now().minusDays(1)).description("Descricao da obra geral")

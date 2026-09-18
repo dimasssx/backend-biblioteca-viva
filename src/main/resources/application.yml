@@ -62,3 +62,13 @@ cloudinary:
 logging:
   level:
     org.bibliotecaviva: info
+
+# Local caches and approximate view metrics; see docs/work-performance.md.
+work:
+  cache:
+    front-page-ttl: ${WORK_FRONT_PAGE_TTL:30s}
+    like-count-ttl: ${WORK_LIKE_COUNT_TTL:30s}
+    like-count-max-size: ${WORK_LIKE_COUNT_MAX_SIZE:10000}
+  views:
+    flush-interval-ms: ${WORK_VIEW_FLUSH_INTERVAL_MS:10000}
+    max-pending-works: ${WORK_VIEW_MAX_PENDING_WORKS:10000}

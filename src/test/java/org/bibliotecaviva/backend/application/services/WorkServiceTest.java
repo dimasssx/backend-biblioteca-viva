@@ -27,6 +27,7 @@ import org.bibliotecaviva.backend.application.dtos.CloudinaryUploadResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.springframework.context.ApplicationEventPublisher;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
@@ -70,6 +71,15 @@ class WorkServiceTest {
     @Mock
     private CloudinaryService cloudinaryService;
 
+    @Mock
+    private ApplicationEventPublisher events;
+
+    @Mock
+    private WorkViewService workViewService;
+
+    @Mock
+    private WorkLikeCountService workLikeCountService;
+
     @InjectMocks
     private WorkService workService;
 
@@ -104,27 +114,26 @@ class WorkServiceTest {
         User author = buildUser(UUID.randomUUID(), "autor@teste.com");
         Article work = buildArticle(id, author, "Obra");
         WorkResponse mapped = buildArticleResponse(id, "Obra", 4L, 2L);
-        when(workRepository.findById(id)).thenReturn(Optional.of(work));
-        when(workRepository.getLikeCount(id)).thenReturn(4L);
+        when(workViewService.recordView(id)).thenReturn(new WorkViewService.ViewedWork(work, 1L));
+        when(workLikeCountService.getCount(id)).thenReturn(4L);
         when(commentRepository.countByWork_Id(id)).thenReturn(2L);
-        when(workMapper.toDTO(work, 4L, 2L)).thenReturn(mapped);
+        when(workMapper.toDTO(work, 4L, 2L, 1L)).thenReturn(mapped);
 
         WorkResponse response = workService.getById(id);
 
         assertSame(mapped, response);
-        verify(workRepository).incrementViewCount(id);
-        verify(workMapper).toDTO(work, 4L, 2L);
+        verify(workViewService).recordView(id);
+        verify(workMapper).toDTO(work, 4L, 2L, 1L);
     }
 
     @Test
     void getByIdShouldFailWhenWorkDoesNotExist() {
         UUID id = UUID.randomUUID();
-        when(workRepository.findById(id)).thenReturn(Optional.empty());
+        when(workViewService.recordView(id)).thenThrow(new WorkNotFoundException("Obra não encontrada"));
 
         assertThrows(WorkNotFoundException.class, () -> workService.getById(id));
 
-        verify(workRepository, never()).incrementViewCount(id);
-        verify(workMapper, never()).toDTO(any(), any(), any());
+        verify(workMapper, never()).toDTO(any(), any(), any(), any());
     }
 
     @Test
